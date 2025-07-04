@@ -13,7 +13,9 @@ This guide will help you deploy your API on Render and workers on Railway.
 ### API (Render)
 
 - `DATABASE_URL`: PostgreSQL connection string
-- `REDIS_URL`: Redis connection string
+- `REDIS_URL`: Redis connection string (for job queue)
+- `UPSTASH_REDIS_REST_URL`: Upstash Redis REST URL (for rate limiting)
+- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST token (for rate limiting)
 - `JWT_SECRET`: Secret key for JWT tokens
 - `ENC_KEY`: Encryption key
 - `NODE_ENV`: production
@@ -23,7 +25,9 @@ This guide will help you deploy your API on Render and workers on Railway.
 ### Workers (Railway)
 
 - `DATABASE_URL`: Same PostgreSQL connection string as API
-- `REDIS_URL`: Same Redis connection string as API
+- `REDIS_URL`: Same Redis connection string as API (for job queue)
+- `UPSTASH_REDIS_REST_URL`: Same Upstash Redis REST URL as API (for rate limiting)
+- `UPSTASH_REDIS_REST_TOKEN`: Same Upstash Redis REST token as API (for rate limiting)
 - `JWT_SECRET`: Same JWT secret as API
 - `ENC_KEY`: Same encryption key as API
 - `NODE_ENV`: production

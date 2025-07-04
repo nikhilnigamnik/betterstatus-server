@@ -13,6 +13,10 @@ services:
         sync: false
       - key: REDIS_URL
         sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
       - key: JWT_SECRET
         sync: false
       - key: ENC_KEY

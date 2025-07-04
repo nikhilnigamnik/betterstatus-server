@@ -64,6 +64,10 @@ DATABASE_URL=postgresql://username:password@localhost:5432/database
 # Redis
 REDIS_URL=redis://localhost:6379
 
+# Upstash Redis (for rate limiting)
+UPSTASH_REDIS_REST_URL=your-upstash-redis-rest-url
+UPSTASH_REDIS_REST_TOKEN=your-upstash-redis-rest-token
+
 # Security
 JWT_SECRET=your-jwt-secret
 ENC_KEY=your-encryption-key
@@ -182,6 +186,8 @@ See `DEPLOYMENT.md` for detailed instructions.
 ```env
 DATABASE_URL=your-production-postgres-url
 REDIS_URL=your-production-redis-url
+UPSTASH_REDIS_REST_URL=your-production-upstash-redis-rest-url
+UPSTASH_REDIS_REST_TOKEN=your-production-upstash-redis-rest-token
 JWT_SECRET=your-production-jwt-secret
 ENC_KEY=your-production-encryption-key
 NODE_ENV=production
