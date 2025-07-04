@@ -3,21 +3,8 @@ import { db } from "@/utils";
 import { waitlist } from "@/db";
 import { eq } from "drizzle-orm";
 import { STATUS_CODE } from "@/constants/status-code";
-import { checkRateLimit, getClientIP } from "@/lib/rate-limit";
 
 export const waitlistController = async (c: Context) => {
-  const ip = getClientIP(c);
-  const { success } = await checkRateLimit(ip);
-  if (!success) {
-    return c.json(
-      {
-        message: "Too many requests, please try again later.",
-        status: STATUS_CODE.TOO_MANY_REQUESTS,
-      },
-      STATUS_CODE.TOO_MANY_REQUESTS
-    );
-  }
-
   const { email } = await c.req.json();
 
   const existing = await db
@@ -37,7 +24,12 @@ export const waitlistController = async (c: Context) => {
 
   await db.insert(waitlist).values({ email });
   return c.json(
-    { message: "Waitlist", status: STATUS_CODE.CREATED },
+    { message: "You're on the waitlist", status: STATUS_CODE.CREATED },
     STATUS_CODE.CREATED
   );
+};
+
+export const getWaitlistController = async (c: Context) => {
+  const response = await db.select().from(waitlist);
+  return c.json({ response }, STATUS_CODE.OK);
 };
