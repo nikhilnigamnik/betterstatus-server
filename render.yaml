@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: batchbird-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ENC_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: "*"
