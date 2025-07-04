@@ -12,7 +12,7 @@ const app = new Hono();
 
 app.use("*", logger());
 app.use("*", secureHeaders());
-app.use("https://batchbird.co", cors());
+app.use("*", cors());
 
 app.get("/", (c) => {
   return c.json({ message: "Better Job API" });
