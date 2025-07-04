@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { AppContext } from "../middleware/auth";
-
 import { authRoutes } from "./auth.routes";
 import { jobRoutes } from "./jobs.routes";
 import { jobLogRoutes } from "./job-logs.routes";

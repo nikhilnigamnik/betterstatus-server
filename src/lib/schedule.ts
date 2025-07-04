@@ -1,6 +1,6 @@
 import { jobService } from "@/services/job";
-import { jobQueue } from "./job-queue";
 import logger from "@/utils/logger";
+import { jobQueue } from "./job-queue";
 
 export function scheduleJobs() {
   setInterval(async () => {
@@ -21,5 +21,5 @@ export function scheduleJobs() {
     } catch (err) {
       logger.error("❌ Scheduler error:", err);
     }
-  }, 30 * 1000);
+  }, 30 * 1000); // 30 seconds
 }
