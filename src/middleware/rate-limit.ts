@@ -1,111 +1,33 @@
-import { Context, Next } from "hono";
+import { Redis } from "@upstash/redis";
 
-interface RateLimitConfig {
-  windowMs: number;
-  max: number;
-  message: string;
-}
+import { Ratelimit } from "@upstash/ratelimit";
+import { MiddlewareHandler } from "hono";
 
-class RateLimiter {
-  private requests = new Map<string, { count: number; resetTime: number }>();
-
-  constructor(private config: RateLimitConfig) {}
-
-  getMessage(): string {
-    return this.config.message;
-  }
-
-  check(identifier: string): boolean {
-    const now = Date.now();
-    const record = this.requests.get(identifier);
-
-    if (!record || now > record.resetTime) {
-      this.requests.set(identifier, {
-        count: 1,
-        resetTime: now + this.config.windowMs,
-      });
-      return true;
-    }
-
-    if (record.count >= this.config.max) {
-      return false;
-    }
-
-    record.count++;
-    return true;
-  }
-}
-
-const generalLimiter = new RateLimiter({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: "Too many requests from this IP, please try again later.",
+export const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const apiLimiter = new RateLimiter({
-  windowMs: 15 * 60 * 1000,
-  max: 1000,
-  message: "API rate limit exceeded, please try again later.",
+export const rateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, "2 h"),
+  prefix: "@upstash/ratelimit",
 });
 
-const authLimiter = new RateLimiter({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: "Too many authentication attempts, please try again later.",
-});
+export const rateLimit: MiddlewareHandler = async (c, next) => {
+  const ip =
+    c.req.header("x-forwarded-for") ||
+    c.req.header("cf-connecting-ip") ||
+    "127.0.0.1";
 
-export const generalRateLimit = async (
-  c: Context,
-  next: Next
-): Promise<Response | void> => {
-  const ip = c.req.header("x-forwarded-for") ?? "unknown";
+  const { success, remaining, reset } = await rateLimiter.limit(ip);
 
-  if (!generalLimiter.check(ip)) {
-    return c.json(
-      {
-        success: false,
-        error: generalLimiter.getMessage(),
-      },
-      429
-    );
-  }
+  c.header("X-RateLimit-Limit", "10");
+  c.header("X-RateLimit-Remaining", remaining.toString());
+  c.header("X-RateLimit-Reset", reset.toString());
 
-  await next();
-};
-
-export const apiRateLimit = async (
-  c: Context,
-  next: Next
-): Promise<Response | void> => {
-  const ip = c.req.header("x-forwarded-for") ?? "unknown";
-
-  if (!apiLimiter.check(ip)) {
-    return c.json(
-      {
-        success: false,
-        error: apiLimiter.getMessage(),
-      },
-      429
-    );
-  }
-
-  await next();
-};
-
-export const authRateLimit = async (
-  c: Context,
-  next: Next
-): Promise<Response | void> => {
-  const ip = c.req.header("x-forwarded-for") || "unknown";
-
-  if (!authLimiter.check(ip)) {
-    return c.json(
-      {
-        success: false,
-        error: authLimiter.getMessage(),
-      },
-      429
-    );
+  if (!success) {
+    return c.text("Too many requests", 429);
   }
 
   await next();
