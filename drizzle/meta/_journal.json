@@ -15,6 +15,13 @@
       "when": 1751478235726,
       "tag": "0001_broad_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751654135941,
+      "tag": "0002_milky_purifiers",
+      "breakpoints": true
     }
   ]
 }

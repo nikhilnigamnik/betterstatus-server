@@ -101,3 +101,9 @@ export const jobLogs = pgTable(
     index("run_at_idx").on(table.run_at),
   ]
 );
+
+export const waitlist = pgTable("waitlist", {
+  id: uuid("id").primaryKey().defaultRandom(), // uuid eg: 123e4567-e89b-12d3-a456-426614174000
+  email: text("email").notNull().unique(), // email eg: john.doe@example.com
+  created_at: timestamp("created_at").defaultNow().notNull(), // created_at eg: 2021-01-01 00:00:00
+});

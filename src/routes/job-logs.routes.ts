@@ -3,7 +3,6 @@ import {
   getJobStatsController,
 } from "@/controller/job-logs";
 import { Hono } from "hono";
-import { jobLogService } from "@/services/job-logs";
 
 export const jobLogRoutes = new Hono();
 
