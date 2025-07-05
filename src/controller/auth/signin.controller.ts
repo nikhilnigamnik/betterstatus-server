@@ -5,31 +5,80 @@ import { userService } from "@/services/user";
 import { Context } from "hono";
 
 export const signinController = async (c: Context) => {
-  const { email, password } = await c.req.json();
+  const { email, password, provider, name } = await c.req.json();
 
-  if (!email || !password) {
-    return c.json(
-      { error: "Email and password are required" },
-      STATUS_CODE.BAD_REQUEST
-    );
+  if (provider === "email") {
+    const user = await userService.getUserByEmail(email);
+
+    if (!user) {
+      return c.json({ error: "User not found" }, STATUS_CODE.NOT_FOUND);
+    }
+
+    const isPasswordValid = await comparePassword(password, user.password);
+
+    if (!isPasswordValid) {
+      return c.json(
+        { error: "Invalid email or password" },
+        STATUS_CODE.UNAUTHORIZED
+      );
+    }
+
+    await setAuthCookie(c, {
+      id: user.id,
+      role: user.role,
+      email: user.email,
+    });
+
+    return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
-  const user = await userService.getUserByEmail(email);
+  if (provider === "google") {
+    let user = await userService.getUserByEmail(email);
 
-  if (!user) {
-    return c.json({ error: "User not found" }, STATUS_CODE.NOT_FOUND);
+    if (!user) {
+      user = await userService.createUser({
+        name,
+        email,
+        password: "",
+        provider,
+        role: "user",
+        is_active: true,
+        is_verified: true,
+      });
+    }
+
+    await setAuthCookie(c, {
+      id: user.id,
+      role: user.role,
+      email: user.email,
+    });
+
+    return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
-  const isPasswordValid = await comparePassword(password, user.password);
+  if (provider === "github") {
+    let user = await userService.getUserByEmail(email);
 
-  if (!isPasswordValid) {
-    return c.json(
-      { error: "Invalid email or password" },
-      STATUS_CODE.UNAUTHORIZED
-    );
+    if (!user) {
+      user = await userService.createUser({
+        name,
+        email,
+        password: "",
+        provider,
+        role: "user",
+        is_active: true,
+        is_verified: true,
+      });
+    }
+
+    await setAuthCookie(c, {
+      id: user.id,
+      role: user.role,
+      email: user.email,
+    });
+
+    return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
-  await setAuthCookie(c, { id: user.id, role: user.role, email: user.email });
-
-  return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
+  return c.json({ error: "Invalid provider" }, STATUS_CODE.BAD_REQUEST);
 };
