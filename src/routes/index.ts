@@ -16,6 +16,12 @@ const app = new Hono<AppContext>();
 app.post("/waitlist", rateLimit, waitlistController);
 app.get("/waitlist", getWaitlistController);
 
+app.get("/debug", (c) => {
+  return c.json({
+    headers: Object.fromEntries(c.req.raw.headers.entries()),
+  });
+});
+
 // auth routes
 app.route("/auth", authRoutes);
 
