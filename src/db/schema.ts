@@ -31,6 +31,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(), // email eg: john.doe@example.com
   password: text("password").notNull(), // password eg: password123
   role: text("role").notNull().default("user"), // role eg: user, admin
+  provider: text("provider").notNull().default("email"), // provider eg: email, google, github, etc.
   is_active: boolean("is_active").default(true).notNull(), // is_active eg: true
   is_verified: boolean("is_verified").default(false).notNull(), // is_verified eg: false
 
