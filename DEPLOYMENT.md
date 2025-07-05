@@ -5,7 +5,7 @@ This guide will help you deploy your API on Render and workers on Railway.
 ## Prerequisites
 
 1. **Database**: Set up a PostgreSQL database (you can use Railway, Supabase, or any other provider)
-2. **Redis**: Set up a Redis instance (you can use Railway, Upstash, or any other provider)
+2. **Redis**: Set up a Redis instance (you can use Railway or any other provider)
 3. **GitHub Repository**: Push your code to GitHub
 
 ## Environment Variables
@@ -14,8 +14,7 @@ This guide will help you deploy your API on Render and workers on Railway.
 
 - `DATABASE_URL`: PostgreSQL connection string
 - `REDIS_URL`: Redis connection string (for job queue)
-- `UPSTASH_REDIS_REST_URL`: Upstash Redis REST URL (for rate limiting)
-- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST token (for rate limiting)
+
 - `JWT_SECRET`: Secret key for JWT tokens
 - `ENC_KEY`: Encryption key
 - `NODE_ENV`: production
@@ -26,8 +25,7 @@ This guide will help you deploy your API on Render and workers on Railway.
 
 - `DATABASE_URL`: Same PostgreSQL connection string as API
 - `REDIS_URL`: Same Redis connection string as API (for job queue)
-- `UPSTASH_REDIS_REST_URL`: Same Upstash Redis REST URL as API (for rate limiting)
-- `UPSTASH_REDIS_REST_TOKEN`: Same Upstash Redis REST token as API (for rate limiting)
+
 - `JWT_SECRET`: Same JWT secret as API
 - `ENC_KEY`: Same encryption key as API
 - `NODE_ENV`: production
@@ -98,7 +96,7 @@ This guide will help you deploy your API on Render and workers on Railway.
 
 1. **Create Redis Instance**:
 
-   - Use Railway, Upstash, or any Redis provider
+   - Use Railway or any Redis provider
    - Get the connection string
 
 2. **Verify Connection**:
