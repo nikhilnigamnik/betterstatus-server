@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { db } from "@/utils";
 import { waitlist } from "@/db";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { STATUS_CODE } from "@/constants/status-code";
 
 export const waitlistController = async (c: Context) => {
@@ -30,6 +30,6 @@ export const waitlistController = async (c: Context) => {
 };
 
 export const getWaitlistController = async (c: Context) => {
-  const response = await db.select().from(waitlist);
+  const response = await db.select({ count: count() }).from(waitlist);
   return c.json({ response }, STATUS_CODE.OK);
 };
