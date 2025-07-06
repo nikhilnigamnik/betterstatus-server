@@ -20,6 +20,10 @@ export async function verifyToken<T = Record<string, any>>(
   }
 }
 
-export function decodeToken<T = any>(token: string): T {
-  return decode(token) as T;
+export function decodeToken<T = any>(token: string): T | null {
+  try {
+    return decode(token) as T;
+  } catch {
+    return null;
+  }
 }
