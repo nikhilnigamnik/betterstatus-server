@@ -1,5 +1,5 @@
 {
-  "id": "44bbe85f-3ac0-44f9-b916-b3aaff3678a8",
+  "id": "27c2aebf-6b26-4828-b209-6c108504cff4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -366,6 +366,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'email'"
         },
         "is_active": {
           "name": "is_active",

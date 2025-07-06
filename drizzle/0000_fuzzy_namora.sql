@@ -42,6 +42,7 @@ CREATE TABLE "users" (
 	"email" text NOT NULL,
 	"password" text NOT NULL,
 	"role" text DEFAULT 'user' NOT NULL,
+	"provider" text DEFAULT 'email' NOT NULL,
 	"is_active" boolean DEFAULT true NOT NULL,
 	"is_verified" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,

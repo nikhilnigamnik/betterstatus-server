@@ -11,14 +11,14 @@ export const signinController = async (c: Context) => {
     const user = await userService.getUserByEmail(email);
 
     if (!user) {
-      return c.json({ error: "User not found" }, STATUS_CODE.NOT_FOUND);
+      return c.json({ message: "User not found" }, STATUS_CODE.NOT_FOUND);
     }
 
     const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) {
       return c.json(
-        { error: "Invalid email or password" },
+        { message: "Invalid email or password" },
         STATUS_CODE.UNAUTHORIZED
       );
     }
@@ -80,5 +80,5 @@ export const signinController = async (c: Context) => {
     return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
-  return c.json({ error: "Invalid provider" }, STATUS_CODE.BAD_REQUEST);
+  return c.json({ message: "Invalid provider" }, STATUS_CODE.BAD_REQUEST);
 };
