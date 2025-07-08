@@ -1,6 +1,7 @@
 import { setCookie, getCookie, deleteCookie } from "hono/cookie";
 import type { Context } from "hono";
 import { generateToken, verifyToken } from "./jwt";
+import { isProduction } from "@/utils";
 
 const COOKIE_NAME = "auth_token";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
@@ -10,7 +11,7 @@ export async function setAuthCookie(c: Context, payload: Record<string, any>) {
 
   setCookie(c, COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isProduction,
     sameSite: "Lax",
     path: "/",
     maxAge: COOKIE_MAX_AGE,
