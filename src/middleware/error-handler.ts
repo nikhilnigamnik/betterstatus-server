@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { ApiResponse } from "../types";
+import { isDevelopment } from "@/utils";
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -16,7 +17,7 @@ export const errorHandler = (err: Error, c: Context) => {
     error: message,
   };
 
-  if (process.env.NODE_ENV === "development") {
+  if (isDevelopment) {
     response.data = {
       stack: appError.stack,
       statusCode,

@@ -1,14 +1,14 @@
 import { createLogger, format, transports } from "winston";
 import path from "path";
 import fs from "fs";
+import { isProduction } from "./env";
 
 const logDir = path.join(__dirname, "../logs");
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
-const isProduction = process.env.NODE_ENV === "production";
-
 const logger = createLogger({
   level: isProduction ? "info" : "debug",
+  silent: isProduction,
   format: format.combine(
     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     isProduction
