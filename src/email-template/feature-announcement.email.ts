@@ -66,8 +66,8 @@ export function newFeatureAnnouncementEmail(
           <a href="${ctaLink}" class="button">Try ${featureName} Now</a>
   
           <div class="footer">
-            <p>Questions or feedback? Reach out at <a href="mailto:support@batchbird.co" style="color:#000;">support@batchbird.co</a></p>
-            <p>Thanks for building with BatchBird 🚀</p>
+            <p>Questions or feedback? Reach out at <a href="mailto:support@betterstatus.co" style="color:#000;">support@betterstatus.co</a></p>
+            <p>Thanks for building with betterstatus 🚀</p>
           </div>
         </body>
       </html>

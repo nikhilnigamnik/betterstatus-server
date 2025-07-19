@@ -1,5 +1,5 @@
 {
-  "name": "batchbird-server",
+  "name": "betterstatus-server",
   "version": "1.0.0",
   "description": "TypeScript server application",
   "main": "dist/index.js",

@@ -64,7 +64,7 @@ export function serviceRestoredEmail(
           <p>Monitoring will continue as usual. If issues persist, you'll be notified.</p>
   
           <div class="footer">
-            <p>Questions? Reach out to <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
+            <p>Questions? Reach out to <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
             <p>Reliable monitoring. Always on watch.</p>
           </div>
         </body>

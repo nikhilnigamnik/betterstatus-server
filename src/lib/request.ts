@@ -2,21 +2,21 @@ import { z } from "zod";
 import { Context } from "hono";
 
 export async function parseRequest(c: Context, schema?: z.ZodSchema<any>) {
-  const user = c.get("user");
-  const url = c.req.url;
-  const searchParams = c.req.query();
-  const searchQuery = c.req.query("q") ?? "";
+  const user = c.get("user"); // Get authenticated user
+  const url = c.req.url; // Full request URL
+  const searchParams = c.req.query(); // All query parameters
+  const searchQuery = c.req.query("q") ?? ""; // Specific 'q' parameter
 
   let body = null;
   let errors: string[] = [];
 
   try {
     if (c.req.method !== "GET" && c.req.method !== "HEAD") {
-      body = await c.req.json();
+      body = await c.req.json(); // Try JSON first
     }
   } catch {
     try {
-      body = await c.req.text();
+      body = await c.req.text(); // Fallback to text
     } catch {
       errors.push("Failed to parse request body");
       body = null;
@@ -34,18 +34,18 @@ export async function parseRequest(c: Context, schema?: z.ZodSchema<any>) {
   }
 
   return {
-    auth: user,
-    body: sanitizeBody(body),
-    searchParams,
-    searchQuery,
-    url,
-    errors,
+    auth: user, // Authenticated user data
+    body: sanitizeBody(body), // Sanitized request body
+    searchParams, // All query parameters
+    searchQuery, // Specific search query
+    url, // Request URL
+    errors, // Validation/parsing errors
   };
 }
 
 function sanitizeBody(body: any): any {
   if (!body || typeof body !== "object") {
-    return body;
+    return body; // Return as-is for non-objects
   }
 
   const sanitized: any = {};

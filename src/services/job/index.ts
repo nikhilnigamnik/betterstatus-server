@@ -1,4 +1,4 @@
-import { jobs } from "@/db";
+import { cron_job } from "@/db";
 import { db } from "@/utils";
 import { eq } from "drizzle-orm";
 
@@ -9,7 +9,7 @@ export const jobService = {
    * @returns Promise resolving to an array containing the job or empty array if not found
    */
   getJobById: async (id: string) => {
-    const job = await db.select().from(jobs).where(eq(jobs.id, id));
+    const job = await db.select().from(cron_job).where(eq(cron_job.id, id));
     return job;
   },
 
@@ -18,12 +18,15 @@ export const jobService = {
    * @returns Promise resolving to an array of all jobs
    */
   getAllJobs: async () => {
-    const job = await db.select().from(jobs);
+    const job = await db.select().from(cron_job);
     return job;
   },
 
   getActiveJobs: async () => {
-    const job = await db.select().from(jobs).where(eq(jobs.status, "active"));
+    const job = await db
+      .select()
+      .from(cron_job)
+      .where(eq(cron_job.status, "active"));
     return job;
   },
 
@@ -32,8 +35,8 @@ export const jobService = {
    * @param jobData - The job data to insert, must match the jobs table schema
    * @returns Promise resolving to the created job object
    */
-  createJob: async (jobData: typeof jobs.$inferInsert) => {
-    const [job] = await db.insert(jobs).values(jobData).returning();
+  createJob: async (jobData: typeof cron_job.$inferInsert) => {
+    const [job] = await db.insert(cron_job).values(jobData).returning();
     return job;
   },
 
@@ -43,11 +46,11 @@ export const jobService = {
    * @param jobData - The updated job data
    * @returns Promise resolving to the updated job object
    */
-  updateJob: async (id: string, jobData: typeof jobs.$inferSelect) => {
+  updateJob: async (id: string, jobData: typeof cron_job.$inferSelect) => {
     const [job] = await db
-      .update(jobs)
+      .update(cron_job)
       .set(jobData)
-      .where(eq(jobs.id, id))
+      .where(eq(cron_job.id, id))
       .returning();
     return job;
   },
@@ -58,7 +61,10 @@ export const jobService = {
    * @returns Promise resolving to the deleted job object
    */
   deleteJob: async (id: string) => {
-    const [job] = await db.delete(jobs).where(eq(jobs.id, id)).returning();
+    const [job] = await db
+      .delete(cron_job)
+      .where(eq(cron_job.id, id))
+      .returning();
     return job;
   },
 
@@ -67,8 +73,11 @@ export const jobService = {
    * @param userId - The unique identifier of the user
    * @returns Promise resolving to an array of jobs belonging to the user
    */
-  getJobsByUserId: async (userId: string) => {
-    const job = await db.select().from(jobs).where(eq(jobs.user_id, userId));
+  getJobsByWorkspaceId: async (workspaceId: string) => {
+    const job = await db
+      .select()
+      .from(cron_job)
+      .where(eq(cron_job.workspace_id, workspaceId));
     return job;
   },
 };

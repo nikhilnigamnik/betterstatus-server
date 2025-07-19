@@ -7,8 +7,11 @@ import {
   json,
 } from "drizzle-orm/pg-core";
 import { user } from "./user";
-import { jobStatusEnum } from "../schema";
-import { notificationTypeEnum, notificationChannelEnum } from "./enums";
+import {
+  statusEnum,
+  notificationTypeEnum,
+  notificationChannelEnum,
+} from "./enums";
 
 export const workspace = pgTable("workspace", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -16,7 +19,7 @@ export const workspace = pgTable("workspace", {
   user_id: uuid("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  status: jobStatusEnum("status").notNull().default("active"),
+  status: statusEnum("status").notNull().default("active"),
   is_active: boolean("is_active").default(true).notNull(),
   description: text("description"),
   logo_url: text("logo_url"),

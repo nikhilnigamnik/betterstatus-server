@@ -36,16 +36,16 @@ export function inviteMemberEmail(workspaceName: string, link: string) {
         </style>
       </head>
       <body>
-        <h1>You're Invited to <strong>${workspaceName}</strong> on BatchBird</h1>
+        <h1>You're Invited to <strong>${workspaceName}</strong> on betterstatus</h1>
         <p>Hello there,</p>
-        <p>You've been invited to collaborate in the <strong>${workspaceName}</strong> workspace on <strong>BatchBird</strong>.</p>
-        <p>BatchBird helps teams manage uptime, monitor APIs, and handle incidents effortlessly.</p>
+        <p>You've been invited to collaborate in the <strong>${workspaceName}</strong> workspace on <strong>betterstatus</strong>.</p>
+        <p>betterstatus helps teams manage uptime, monitor APIs, and handle incidents effortlessly.</p>
         <p>To accept the invitation and get started, simply click the button below:</p>
         <a href="${link}" class="button">Accept Invitation</a>
         <p>If you didn’t expect this invitation, feel free to ignore this message — no action will be taken without your confirmation.</p>
 
         <div class="footer">
-          <p>Need help? Reach out to our team at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
+          <p>Need help? Reach out to our team at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
           <p>Stay on top of uptime. Build with confidence.</p>
         </div>
       </body>
