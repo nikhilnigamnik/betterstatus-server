@@ -36,14 +36,14 @@ export function magicLinkEmail(link: string) {
           </style>
         </head>
         <body>
-          <h1>Sign in to <strong>BatchBird</strong></h1>
+          <h1>Sign in to <strong>betterstatus</strong></h1>
           <p>Hello,</p>
           <p>You requested a secure sign-in link for your account. Click below to continue:</p>
           <a href="${link}" class="button">Sign in</a>
           <p>This link will expire shortly for your security. If you didn’t request this, you can safely ignore the email.</p>
   
           <div class="footer">
-            <p>Need help? Contact us at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
+            <p>Need help? Contact us at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
             <p>Secure. Simple. Seamless.</p>
           </div>
         </body>

@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { runJob } from "./rub-job";
+import { runJob } from "./run-job";
 import { connection } from "./job-queue";
 import logger from "@/utils/logger";
 

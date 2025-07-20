@@ -40,7 +40,7 @@ This guide will help you deploy your API on Render and workers on Railway.
 
 2. **Configure Service**:
 
-   - **Name**: `batchbird-api`
+   - **Name**: `betterstatus-api`
    - **Environment**: `Node`
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `npm start`

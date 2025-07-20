@@ -28,6 +28,7 @@ export const PLAN_AND_LIMITS = {
       "all_in_hobby",
       "email_notifications",
       "slack_notifications",
+      "microsoft_teams_notifications",
       "webhook_notifications",
       "custom_domains",
     ],

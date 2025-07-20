@@ -67,7 +67,7 @@ export function monthlyUpdateEmail(
           <p>Proactive monitoring and reliable alerts help your team stay focused and informed. Let us know how we can improve your experience.</p>
   
           <div class="footer">
-            <p>Have questions? Reach out at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
+            <p>Have questions? Reach out at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
             <p>Keep building. We'll keep watching.</p>
           </div>
         </body>

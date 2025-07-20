@@ -1,4 +1,4 @@
-# Batchbird Server
+# betterstatus Server
 
 A TypeScript based job processing server with API and worker services, built with Hono, BullMQ, and PostgreSQL.
 
@@ -44,7 +44,7 @@ Both services can be deployed independently while sharing the same database and 
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd batchbird-server
+cd betterstatus-server
 
 # Install dependencies
 npm install

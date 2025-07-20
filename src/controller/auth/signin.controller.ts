@@ -5,16 +5,23 @@ import { userService } from "@/services/user";
 import { Context } from "hono";
 
 export const signinController = async (c: Context) => {
-  const { email, password, provider, name } = await c.req.json();
+  const { email, password, provider, name, avatarUrl } = await c.req.json();
 
   if (provider === "email") {
-    const user = await userService.getUserByEmail(email);
+    const foundUser = await userService.getUserByEmail(email);
 
-    if (!user) {
+    if (!foundUser) {
       return c.json({ message: "User not found" }, STATUS_CODE.NOT_FOUND);
     }
 
-    const isPasswordValid = await comparePassword(password, user.password);
+    if (!foundUser.password) {
+      return c.json(
+        { message: "Invalid email or password" },
+        STATUS_CODE.UNAUTHORIZED
+      );
+    }
+
+    const isPasswordValid = await comparePassword(password, foundUser.password);
 
     if (!isPasswordValid) {
       return c.json(
@@ -24,57 +31,60 @@ export const signinController = async (c: Context) => {
     }
 
     await setAuthCookie(c, {
-      id: user.id,
-      role: user.role,
-      email: user.email,
+      id: foundUser.id,
+      role: foundUser.role,
+      email: foundUser.email,
     });
 
     return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
   if (provider === "google") {
-    let user = await userService.getUserByEmail(email);
+    let existingUser = await userService.getUserByEmail(email);
 
-    if (!user) {
-      user = await userService.createUser({
+    if (!existingUser) {
+      existingUser = await userService.createUser({
         name,
         email,
-        password: "",
-        provider,
+        password: null,
+        auth_provider: "google",
+        provider_id: null,
+        avatar_url: avatarUrl,
         role: "user",
         is_active: true,
-        is_verified: true,
+        email_verified_at: new Date(),
       });
     }
 
     await setAuthCookie(c, {
-      id: user.id,
-      role: user.role,
-      email: user.email,
+      id: existingUser.id,
+      role: existingUser.role,
+      email: existingUser.email,
     });
 
     return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);
   }
 
   if (provider === "github") {
-    let user = await userService.getUserByEmail(email);
+    let existingUser = await userService.getUserByEmail(email);
 
-    if (!user) {
-      user = await userService.createUser({
+    if (!existingUser) {
+      existingUser = await userService.createUser({
         name,
         email,
-        password: "",
-        provider,
+        password: null,
+        auth_provider: "github",
+        provider_id: null,
         role: "user",
         is_active: true,
-        is_verified: true,
+        email_verified_at: new Date(),
       });
     }
 
     await setAuthCookie(c, {
-      id: user.id,
-      role: user.role,
-      email: user.email,
+      id: existingUser.id,
+      role: existingUser.role,
+      email: existingUser.email,
     });
 
     return c.json({ message: "Login successful" }, STATUS_CODE.SUCCESS);

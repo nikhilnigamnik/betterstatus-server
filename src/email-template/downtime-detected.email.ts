@@ -66,7 +66,7 @@ export function downtimeDetectedEmail(
           <p>We'll continue monitoring and alert you when the service is back online.</p>
   
           <div class="footer">
-            <p>Need help? Contact us at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
+            <p>Need help? Contact us at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
             <p>Stay resilient. We'll handle the rest.</p>
           </div>
         </body>

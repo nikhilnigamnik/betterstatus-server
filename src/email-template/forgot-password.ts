@@ -38,14 +38,14 @@ export function forgotPasswordEmail(resetLink: string) {
         <body>
           <h1>Reset your password</h1>
           <p>Hello,</p>
-          <p>We received a request to reset your password for your BatchBird account. If you made this request, click the button below to set a new password:</p>
+          <p>We received a request to reset your password for your betterstatus account. If you made this request, click the button below to set a new password:</p>
           <a href="${resetLink}" class="button">Reset Password</a>
           <p>This link will expire shortly for your security.</p>
           <p>If you didn’t request a password reset, you can safely ignore this email.</p>
   
           <div class="footer">
-            <p>Need help? Contact us at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
-            <p>Stay secure with BatchBird.</p>
+            <p>Need help? Contact us at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
+            <p>Stay secure with betterstatus.</p>
           </div>
         </body>
       </html>

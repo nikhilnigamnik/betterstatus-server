@@ -64,8 +64,8 @@ export function incidentResolvedEmail(
           <p>Thank you for your patience. We'll continue monitoring to ensure everything remains stable.</p>
   
           <div class="footer">
-            <p>Need help? Contact us at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
-            <p>BatchBird — reliable alerts, developer-first tools.</p>
+            <p>Need help? Contact us at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
+            <p>betterstatus — reliable alerts, developer-first tools.</p>
           </div>
         </body>
       </html>

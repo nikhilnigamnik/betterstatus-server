@@ -68,8 +68,8 @@ export function failedCronJobEmail(
           <p>Investigate the error and resolve the issue to ensure your systems continue operating smoothly.</p>
   
           <div class="footer">
-            <p>Need help? Contact us at <a href="mailto:support@batchbird.co" style="color: #000;">support@batchbird.co</a></p>
-            <p>BatchBird is watching your jobs — so you don’t have to.</p>
+            <p>Need help? Contact us at <a href="mailto:support@betterstatus.co" style="color: #000;">support@betterstatus.co</a></p>
+            <p>betterstatus is watching your jobs — so you don’t have to.</p>
           </div>
         </body>
       </html>

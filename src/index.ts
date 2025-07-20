@@ -39,8 +39,13 @@ const app = new Hono();
 
 app.use("*", logger());
 app.use("*", secureHeaders());
-app.use("*", cors());
-
+app.use(
+  "*",
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.get("/", (c) => {
   return c.json({ message: "Better Job API" });
 });
