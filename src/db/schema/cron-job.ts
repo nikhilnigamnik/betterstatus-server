@@ -1,49 +1,67 @@
 import {
+  boolean,
+  index,
+  integer,
   pgTable,
-  uuid,
   text,
   timestamp,
-  json,
-  integer,
+  uuid,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { workspace } from "./workspace";
-import { httpMethodEnum, statusEnum } from "./enums";
+import { endpoint } from "./monitor";
+import { jobStatusEnum } from "./enums";
 
-export const cron_job = pgTable("cron_job", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  workspace_id: uuid("workspace_id")
-    .notNull()
-    .references(() => workspace.id, { onDelete: "cascade" }),
-  name: text("name").notNull(),
-  url: text("url").notNull(),
-  method: httpMethodEnum("method").notNull().default("GET"),
-  headers: json("headers"),
-  body: json("body"),
-  cron_expression: text("cron_expression"),
-  interval_seconds: integer("interval_seconds"),
-  timeout_ms: integer("timeout_ms").default(10000),
-  max_retries: integer("max_retries").default(3),
-  last_run_at: timestamp("last_run_at"),
-  next_run_at: timestamp("next_run_at"),
-  last_success_at: timestamp("last_success_at"),
-  last_failure_at: timestamp("last_failure_at"),
-  status: statusEnum("status").default("active"),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
+export const cronJob = pgTable(
+  "cron_job",
+  {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
 
-export const cron_job_log = pgTable("cron_job_log", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  cron_job_id: uuid("cron_job_id")
-    .notNull()
-    .references(() => cron_job.id, { onDelete: "cascade" }),
-  status_code: integer("status_code"),
-  response_body: text("response_body"),
-  error_message: text("error_message"),
-  duration_ms: integer("duration_ms"),
-  retry_count: integer("retry_count").default(0),
-  succeed_at: timestamp("succeed_at"),
-  failed_at: timestamp("failed_at"),
-  run_at: timestamp("run_at").defaultNow().notNull(),
-  deleted_at: timestamp("deleted_at"),
-});
+    endpoint_id: uuid("endpoint_id")
+      .notNull()
+      .references(() => endpoint.id, { onDelete: "cascade" }),
+
+    bullmq_job_id: varchar("bullmq_job_id", { length: 255 }).unique(),
+    cron_expression: varchar("cron_expression", { length: 100 }),
+    interval_seconds: integer("interval_seconds"),
+
+    is_active: boolean("is_active").notNull().default(true),
+
+    last_run_at: timestamp("last_run_at"),
+    next_run_at: timestamp("next_run_at"),
+
+    created_at: timestamp("created_at").notNull().defaultNow(),
+    updated_at: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("cron_job_endpoint_id_idx").on(table.endpoint_id),
+    index("cron_job_next_run_at_idx").on(table.next_run_at),
+  ]
+);
+
+export const jobExecution = pgTable(
+  "job_execution",
+  {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+
+    cron_job_id: uuid("cron_job_id")
+      .notNull()
+      .references(() => cronJob.id, { onDelete: "cascade" }),
+
+    endpoint_id: uuid("endpoint_id")
+      .notNull()
+      .references(() => endpoint.id, { onDelete: "cascade" }),
+
+    status: jobStatusEnum("status").notNull(),
+
+    execution_time_ms: integer("execution_time_ms"),
+    error_message: text("error_message"),
+    retry_count: integer("retry_count").notNull().default(0),
+    executed_at: timestamp("executed_at").notNull().defaultNow(),
+    deleted_at: timestamp("deleted_at"),
+  },
+  (table) => [
+    index("job_execution_cron_job_id_idx").on(table.cron_job_id),
+    index("job_execution_endpoint_id_idx").on(table.endpoint_id),
+    index("job_execution_executed_at_idx").on(table.executed_at),
+  ]
+);

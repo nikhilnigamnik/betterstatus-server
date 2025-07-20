@@ -21,6 +21,8 @@ export const signupController = async (c: Context) => {
 
     const { email, password, name, provider } = body;
 
+    const authProvider = provider as "email" | "google" | "github";
+
     const existingUser = await userService.getUserByEmail(email);
     if (existingUser) {
       return c.json(
@@ -33,26 +35,26 @@ export const signupController = async (c: Context) => {
 
     let userData;
 
-    if (provider === "email") {
+    if (authProvider === "email") {
       const hashedPassword = await hashPassword(password);
       userData = {
         email,
         password: hashedPassword,
         name,
-        provider,
-        role: "user",
+        auth_provider: authProvider,
+        role: "user" as const,
         is_active: true,
-        is_verified: false,
+        email_verified_at: null,
       };
     } else {
       userData = {
         email,
         password: "",
         name,
-        provider,
-        role: "user",
+        auth_provider: authProvider,
+        role: "user" as const,
         is_active: true,
-        is_verified: true,
+        email_verified_at: new Date(),
       };
     }
 
@@ -61,7 +63,7 @@ export const signupController = async (c: Context) => {
     return c.json(
       {
         message:
-          provider === "email"
+          authProvider === "email"
             ? "Account created successfully. Please check your email for verification."
             : "Account created successfully",
       },

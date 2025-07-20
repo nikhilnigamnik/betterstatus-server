@@ -1,73 +1,64 @@
-import { users } from "@/db";
 import { db } from "@/utils";
 import { and, eq } from "drizzle-orm";
+import { user } from "@/db";
 
 export const userService = {
   /**
-   * Retrieves a user by their ID
-   * @param id - The unique identifier of the user
-   * @returns The user object if found and active, undefined otherwise
+   * Get a user by ID (only if active)
    */
   getUserById: async (id: string) => {
-    const [user] = await db
+    const [foundUser] = await db
       .select()
-      .from(users)
-      .where(and(eq(users.id, id), eq(users.is_active, true)));
-    return user;
+      .from(user)
+      .where(and(eq(user.id, id), eq(user.is_active, true)));
+    return foundUser;
   },
 
   /**
-   * Retrieves all active users from the database
-   * @returns Array of all active user objects
+   * Get all active users
    */
   getAllUsers: async () => {
-    const user = await db.select().from(users).where(eq(users.is_active, true));
-    return user;
+    return await db.select().from(user).where(eq(user.is_active, true));
   },
 
   /**
-   * Retrieves a user by their email address
-   * @param email - The email address of the user
-   * @returns The user object if found and active, undefined otherwise
+   * Get a user by email (only if active)
    */
   getUserByEmail: async (email: string) => {
-    const [user] = await db
+    const [foundUser] = await db
       .select()
-      .from(users)
-      .where(and(eq(users.email, email), eq(users.is_active, true)));
-    return user;
+      .from(user)
+      .where(and(eq(user.email, email), eq(user.is_active, true)));
+    return foundUser;
   },
 
   /**
-   * Creates a new user in the database
-   * @param user - The user data to insert
-   * @returns The newly created user object
+   * Create a new user
    */
-  createUser: async (userData: typeof users.$inferInsert) => {
-    const [user] = await db.insert(users).values(userData).returning();
-    return user;
+  createUser: async (userData: typeof user.$inferInsert) => {
+    const [newUser] = await db.insert(user).values(userData).returning();
+    return newUser;
   },
 
   /**
-   * Updates an existing user's information
-   * @param id - The unique identifier of the user to update
-   * @param user - The updated user data
-   * @returns The updated user object if found and active, undefined otherwise
+   * Update an existing user by ID (only if active)
    */
-  updateUser: async (id: string, userData: typeof users.$inferSelect) => {
-    const [user] = await db
-      .update(users)
+  updateUser: async (
+    id: string,
+    userData: Partial<typeof user.$inferInsert>
+  ) => {
+    const [updatedUser] = await db
+      .update(user)
       .set(userData)
-      .where(and(eq(users.id, id), eq(users.is_active, true)))
+      .where(and(eq(user.id, id), eq(user.is_active, true)))
       .returning();
-    return user;
+    return updatedUser;
   },
 
   /**
-   * Soft deletes a user by setting their is_active flag to false
-   * @param id - The unique identifier of the user to delete
+   * Soft delete a user by setting isActive to false
    */
   deleteUser: async (id: string) => {
-    await db.update(users).set({ is_active: false }).where(eq(users.id, id));
+    await db.update(user).set({ is_active: false }).where(eq(user.id, id));
   },
 };

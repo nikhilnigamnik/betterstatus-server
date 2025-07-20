@@ -34,13 +34,13 @@ export const verifyEmailController = async (c: Context) => {
     );
   }
 
-  if (user.is_verified) {
+  if (user.email_verified_at) {
     return c.json({ message: "Email is already verified" }, STATUS_CODE.OK);
   }
 
   await userService.updateUser(user.id, {
     ...user,
-    is_verified: true,
+    email_verified_at: new Date(),
   });
 
   return c.json({ message: "Email verified successfully" }, STATUS_CODE.OK);
