@@ -8,9 +8,22 @@ export const userService = {
    */
   getUserById: async (id: string) => {
     const [foundUser] = await db
-      .select()
+      .select({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar_url: user.avatar_url,
+        auth_provider: user.auth_provider,
+        is_active: user.is_active,
+        email_verified_at: user.email_verified_at,
+        last_login_at: user.last_login_at,
+        role: user.role,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      })
       .from(user)
       .where(and(eq(user.id, id), eq(user.is_active, true)));
+
     return foundUser;
   },
 
