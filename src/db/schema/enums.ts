@@ -1,6 +1,5 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
-// Enums
 export const authProviderEnum = pgEnum("auth_provider", [
   "email",
   "google",

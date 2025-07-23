@@ -22,7 +22,7 @@ export const monitor = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
 
-    name: varchar("name", { length: 255 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(), // e.g. "My Website"
     description: text("description"),
     base_url: text("base_url").notNull(),
 
@@ -63,7 +63,7 @@ export const endpoint = pgTable(
     timeout_seconds: integer("timeout_seconds").notNull().default(30),
     check_interval_seconds: integer("check_interval_seconds")
       .notNull()
-      .default(300),
+      .default(60), // 1 minute
 
     is_active: boolean("is_active").notNull().default(true),
 
