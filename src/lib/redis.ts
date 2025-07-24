@@ -5,6 +5,9 @@ export const redis = new Redis("redis://localhost:6379", {
   maxRetriesPerRequest: null,
 });
 
-export function createQueue(name: string) {
-  return new Queue(name, { connection: redis });
-}
+export const endpointQueue = new Queue("endpoint-checks", {
+  connection: redis,
+});
+export const logQueue = new Queue("endpoint-logs", {
+  connection: redis,
+});
