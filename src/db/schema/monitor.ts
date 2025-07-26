@@ -22,7 +22,7 @@ export const monitor = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
 
-    name: varchar("name", { length: 255 }).notNull(), // e.g. "My Website"
+    name: varchar("name", { length: 255 }).notNull(),
     description: text("description"),
     base_url: text("base_url").notNull(),
 
@@ -63,12 +63,11 @@ export const endpoint = pgTable(
     timeout_seconds: integer("timeout_seconds").notNull().default(30),
     check_interval_seconds: integer("check_interval_seconds")
       .notNull()
-      .default(60), // 1 minute
+      .default(60),
 
     is_active: boolean("is_active").notNull().default(true),
-
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow(),
+    last_checked_at: timestamp("last_checked_at"),
+    next_check_at: timestamp("next_check_at").notNull().defaultNow(),
   },
   (table) => [
     index("endpoint_monitor_id_idx").on(table.monitor_id),
@@ -93,11 +92,7 @@ export const monitor_logs = pgTable(
     error_message: text("error_message"),
 
     checked_at: timestamp("checked_at").notNull().defaultNow(),
-
     incident_id: uuid("incident_id").references(() => incident.id),
-
-    created_at: timestamp("created_at").notNull().defaultNow(),
-    updated_at: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
     index("monitor_logs_endpoint_id_idx").on(table.endpoint_id),
