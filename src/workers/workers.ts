@@ -1,32 +1,14 @@
 import { Worker, Job } from "bullmq";
-import fetch from "node-fetch";
-import { performance } from "perf_hooks";
 import { endpointService } from "@/services/endpoint";
 import { endpointQueue, redis } from "@/lib/redis";
-
-interface JobData {
-  endpointId: string;
-}
-
-interface MonitoringResult {
-  response_time_ms: number;
-  http_status_code: number | null;
-  error_message: string | null;
-  success: boolean;
-  status_text: string | null;
-  checked_at: Date;
-}
-
-type EndpointFromService = Awaited<
-  ReturnType<typeof endpointService.getActiveEndpoints>
->[0];
-
-const monitoredEndpoints = new Set<string>();
-const JOB_OPTIONS = {
-  removeOnComplete: 10,
-  removeOnFail: 50,
-  attempts: 3,
-};
+import {
+  EndpointFromService,
+  JOB_OPTIONS,
+  JobData,
+  monitoredEndpoints,
+  MonitoringResult,
+} from "@/types";
+import { performHealthCheck } from "@/lib/health-check";
 
 async function scheduleEndpointJob(endpoint: EndpointFromService, delay = 0) {
   const jobId = `${endpoint.id}:${Date.now()}`;
@@ -70,62 +52,6 @@ async function monitorEndpoint(endpointId: string) {
   }
   const result = await performHealthCheck(endpoint);
   await processResult(endpoint, result);
-}
-
-function parseHeaders(headers: unknown): Record<string, string> {
-  if (!headers || typeof headers !== "object" || headers === null) return {};
-  const result: Record<string, string> = {};
-  for (const [key, value] of Object.entries(headers)) {
-    if (typeof key === "string" && typeof value === "string") {
-      result[key] = value;
-    }
-  }
-  return result;
-}
-
-async function performHealthCheck(
-  endpoint: EndpointFromService
-): Promise<MonitoringResult> {
-  const start = performance.now();
-  const checked_at = new Date();
-  let response_time_ms = 0;
-  let http_status_code: number | null = null;
-  let error_message: string | null = null;
-  let success = false;
-  let status_text: string | null = null;
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
-    const headers = parseHeaders(endpoint.headers);
-    const response = await fetch(endpoint.path, {
-      method: endpoint.method,
-      headers,
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    response_time_ms = Math.round(performance.now() - start);
-    http_status_code = response.status;
-    success = response.ok;
-    status_text = response.statusText;
-  } catch (err) {
-    response_time_ms = Math.round(performance.now() - start);
-    error_message = err instanceof Error ? err.message : String(err);
-    console.error(`Health check failed for ${endpoint.name}:`, {
-      error: error_message,
-      response_time_ms,
-      endpoint_id: endpoint.id,
-    });
-  }
-
-  return {
-    response_time_ms,
-    http_status_code,
-    error_message,
-    success,
-    status_text,
-    checked_at,
-  };
 }
 
 async function processResult(
