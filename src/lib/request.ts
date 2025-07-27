@@ -62,3 +62,14 @@ function sanitizeBody(body: any): any {
 
   return sanitized;
 }
+
+export function parseHeaders(headers: unknown): Record<string, string> {
+  if (!headers || typeof headers !== "object" || headers === null) return {};
+  const result: Record<string, string> = {};
+  for (const [key, value] of Object.entries(headers)) {
+    if (typeof key === "string" && typeof value === "string") {
+      result[key] = value;
+    }
+  }
+  return result;
+}
