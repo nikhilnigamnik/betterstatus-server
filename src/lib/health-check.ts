@@ -1,9 +1,7 @@
-import { EndpointFromService, MonitoringResult } from "@/types";
-import { parseHeaders } from "./request";
+import { EndpointFromService, MonitoringResult } from '@/types';
+import { parseHeaders } from './request';
 
-export async function performHealthCheck(
-  endpoint: EndpointFromService
-): Promise<MonitoringResult> {
+export async function performHealthCheck(endpoint: EndpointFromService): Promise<MonitoringResult> {
   const start = performance.now();
   const checked_at = new Date();
   let response_time_ms = 0;

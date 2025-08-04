@@ -1,283 +1,9 @@
 {
-  "id": "da3ee4b7-5bed-43b3-831c-41ad404456c2",
+  "id": "0ef52238-67a3-45fb-b28e-f144847a093a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.cron_job": {
-      "name": "cron_job",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "endpoint_id": {
-          "name": "endpoint_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "bullmq_job_id": {
-          "name": "bullmq_job_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cron_expression": {
-          "name": "cron_expression",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "interval_seconds": {
-          "name": "interval_seconds",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "last_run_at": {
-          "name": "last_run_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "next_run_at": {
-          "name": "next_run_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "cron_job_endpoint_id_idx": {
-          "name": "cron_job_endpoint_id_idx",
-          "columns": [
-            {
-              "expression": "endpoint_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "cron_job_next_run_at_idx": {
-          "name": "cron_job_next_run_at_idx",
-          "columns": [
-            {
-              "expression": "next_run_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "cron_job_endpoint_id_endpoint_id_fk": {
-          "name": "cron_job_endpoint_id_endpoint_id_fk",
-          "tableFrom": "cron_job",
-          "tableTo": "endpoint",
-          "columnsFrom": [
-            "endpoint_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "cron_job_bullmq_job_id_unique": {
-          "name": "cron_job_bullmq_job_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "bullmq_job_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.job_execution": {
-      "name": "job_execution",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "cron_job_id": {
-          "name": "cron_job_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "endpoint_id": {
-          "name": "endpoint_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "job_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "execution_time_ms": {
-          "name": "execution_time_ms",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "error_message": {
-          "name": "error_message",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "retry_count": {
-          "name": "retry_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "executed_at": {
-          "name": "executed_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "job_execution_cron_job_id_idx": {
-          "name": "job_execution_cron_job_id_idx",
-          "columns": [
-            {
-              "expression": "cron_job_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "job_execution_endpoint_id_idx": {
-          "name": "job_execution_endpoint_id_idx",
-          "columns": [
-            {
-              "expression": "endpoint_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "job_execution_executed_at_idx": {
-          "name": "job_execution_executed_at_idx",
-          "columns": [
-            {
-              "expression": "executed_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "job_execution_cron_job_id_cron_job_id_fk": {
-          "name": "job_execution_cron_job_id_cron_job_id_fk",
-          "tableFrom": "job_execution",
-          "tableTo": "cron_job",
-          "columnsFrom": [
-            "cron_job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "job_execution_endpoint_id_endpoint_id_fk": {
-          "name": "job_execution_endpoint_id_endpoint_id_fk",
-          "tableFrom": "job_execution",
-          "tableTo": "endpoint",
-          "columnsFrom": [
-            "endpoint_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.incident": {
       "name": "incident",
       "schema": "",
@@ -291,12 +17,6 @@
         },
         "monitor_id": {
           "name": "monitor_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "endpoint_id": {
-          "name": "endpoint_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
@@ -319,7 +39,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'open'"
+          "default": "'investigating'"
         },
         "severity": {
           "name": "severity",
@@ -327,7 +47,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'medium'"
+          "default": "'minor'"
         },
         "started_at": {
           "name": "started_at",
@@ -372,11 +92,11 @@
           "method": "btree",
           "with": {}
         },
-        "incident_endpoint_id_idx": {
-          "name": "incident_endpoint_id_idx",
+        "incident_status_idx": {
+          "name": "incident_status_idx",
           "columns": [
             {
-              "expression": "endpoint_id",
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -387,11 +107,11 @@
           "method": "btree",
           "with": {}
         },
-        "incident_status_idx": {
-          "name": "incident_status_idx",
+        "incident_severity_idx": {
+          "name": "incident_severity_idx",
           "columns": [
             {
-              "expression": "status",
+              "expression": "severity",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -408,7 +128,22 @@
             {
               "expression": "started_at",
               "isExpression": false,
-              "asc": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "incident_resolved_at_idx": {
+          "name": "incident_resolved_at_idx",
+          "columns": [
+            {
+              "expression": "resolved_at",
+              "isExpression": false,
+              "asc": true,
               "nulls": "last"
             }
           ],
@@ -425,19 +160,6 @@
           "tableTo": "monitor",
           "columnsFrom": [
             "monitor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "incident_endpoint_id_endpoint_id_fk": {
-          "name": "incident_endpoint_id_endpoint_id_fk",
-          "tableFrom": "incident",
-          "tableTo": "endpoint",
-          "columnsFrom": [
-            "endpoint_id"
           ],
           "columnsTo": [
             "id"
@@ -469,11 +191,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "message": {
-          "name": "message",
-          "type": "text",
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -481,6 +203,19 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         },
         "created_at": {
           "name": "created_at",
@@ -506,13 +241,58 @@
           "method": "btree",
           "with": {}
         },
+        "incident_updates_user_id_idx": {
+          "name": "incident_updates_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "incident_updates_status_idx": {
+          "name": "incident_updates_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "incident_updates_created_at_idx": {
           "name": "incident_updates_created_at_idx",
           "columns": [
             {
               "expression": "created_at",
               "isExpression": false,
-              "asc": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "incident_updates_is_public_idx": {
+          "name": "incident_updates_is_public_idx",
+          "columns": [
+            {
+              "expression": "is_public",
+              "isExpression": false,
+              "asc": true,
               "nulls": "last"
             }
           ],
@@ -535,162 +315,18 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.endpoint": {
-      "name": "endpoint",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
         },
-        "monitor_id": {
-          "name": "monitor_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "path": {
-          "name": "path",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "method": {
-          "name": "method",
-          "type": "endpoint_method",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'GET'"
-        },
-        "headers": {
-          "name": "headers",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "request_body": {
-          "name": "request_body",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "expected_status_code": {
-          "name": "expected_status_code",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 200
-        },
-        "expected_response_content": {
-          "name": "expected_response_content",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "timeout_seconds": {
-          "name": "timeout_seconds",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 30
-        },
-        "check_interval_seconds": {
-          "name": "check_interval_seconds",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 300
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "endpoint_monitor_id_idx": {
-          "name": "endpoint_monitor_id_idx",
-          "columns": [
-            {
-              "expression": "monitor_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "endpoint_monitor_active_idx": {
-          "name": "endpoint_monitor_active_idx",
-          "columns": [
-            {
-              "expression": "monitor_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "is_active",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "endpoint_monitor_id_monitor_id_fk": {
-          "name": "endpoint_monitor_id_monitor_id_fk",
-          "tableFrom": "endpoint",
-          "tableTo": "monitor",
+        "incident_updates_user_id_user_id_fk": {
+          "name": "incident_updates_user_id_user_id_fk",
+          "tableFrom": "incident_updates",
+          "tableTo": "user",
           "columnsFrom": [
-            "monitor_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -715,13 +351,19 @@
           "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -741,6 +383,79 @@
           "primaryKey": false,
           "notNull": true,
           "default": true
+        },
+        "is_archived": {
+          "name": "is_archived",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "check_interval": {
+          "name": "check_interval",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'5m'"
+        },
+        "last_check_at": {
+          "name": "last_check_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "next_check_at": {
+          "name": "next_check_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "email_notifications": {
+          "name": "email_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "slack_notifications": {
+          "name": "slack_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "teams_notifications": {
+          "name": "teams_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "discord_notifications": {
+          "name": "discord_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "slack_webhook_url": {
+          "name": "slack_webhook_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "teams_webhook_url": {
+          "name": "teams_webhook_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discord_webhook_url": {
+          "name": "discord_webhook_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -773,11 +488,11 @@
           "method": "btree",
           "with": {}
         },
-        "monitor_base_url_idx": {
-          "name": "monitor_base_url_idx",
+        "monitor_is_active_idx": {
+          "name": "monitor_is_active_idx",
           "columns": [
             {
-              "expression": "base_url",
+              "expression": "is_active",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -788,11 +503,56 @@
           "method": "btree",
           "with": {}
         },
-        "monitor_id_idx": {
-          "name": "monitor_id_idx",
+        "monitor_is_archived_idx": {
+          "name": "monitor_is_archived_idx",
           "columns": [
             {
-              "expression": "id",
+              "expression": "is_archived",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "monitor_check_interval_idx": {
+          "name": "monitor_check_interval_idx",
+          "columns": [
+            {
+              "expression": "check_interval",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "monitor_last_check_at_idx": {
+          "name": "monitor_last_check_at_idx",
+          "columns": [
+            {
+              "expression": "last_check_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "monitor_next_check_at_idx": {
+          "name": "monitor_next_check_at_idx",
+          "columns": [
+            {
+              "expression": "next_check_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -836,34 +596,34 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "endpoint_id": {
-          "name": "endpoint_id",
+        "monitor_id": {
+          "name": "monitor_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
-          "type": "check_status",
+          "type": "monitor_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "response_time_ms": {
-          "name": "response_time_ms",
+        "status_code": {
+          "name": "status_code",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "http_status_code": {
-          "name": "http_status_code",
+        "response_time": {
+          "name": "response_time",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "response_body": {
           "name": "response_body",
-          "type": "text",
+          "type": "json",
           "primaryKey": false,
           "notNull": false
         },
@@ -879,34 +639,14 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "incident_id": {
-          "name": "incident_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
-        "monitor_logs_endpoint_id_idx": {
-          "name": "monitor_logs_endpoint_id_idx",
+        "monitor_logs_monitor_id_idx": {
+          "name": "monitor_logs_monitor_id_idx",
           "columns": [
             {
-              "expression": "endpoint_id",
+              "expression": "monitor_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -917,32 +657,11 @@
           "method": "btree",
           "with": {}
         },
-        "monitor_logs_endpoint_checked_idx": {
-          "name": "monitor_logs_endpoint_checked_idx",
+        "monitor_logs_status_idx": {
+          "name": "monitor_logs_status_idx",
           "columns": [
             {
-              "expression": "endpoint_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "checked_at",
-              "isExpression": false,
-              "asc": false,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "monitor_logs_incident_id_idx": {
-          "name": "monitor_logs_incident_id_idx",
-          "columns": [
-            {
-              "expression": "incident_id",
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -959,7 +678,7 @@
             {
               "expression": "checked_at",
               "isExpression": false,
-              "asc": false,
+              "asc": true,
               "nulls": "last"
             }
           ],
@@ -970,30 +689,17 @@
         }
       },
       "foreignKeys": {
-        "monitor_logs_endpoint_id_endpoint_id_fk": {
-          "name": "monitor_logs_endpoint_id_endpoint_id_fk",
+        "monitor_logs_monitor_id_monitor_id_fk": {
+          "name": "monitor_logs_monitor_id_monitor_id_fk",
           "tableFrom": "monitor_logs",
-          "tableTo": "endpoint",
+          "tableTo": "monitor",
           "columnsFrom": [
-            "endpoint_id"
+            "monitor_id"
           ],
           "columnsTo": [
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "monitor_logs_incident_id_incident_id_fk": {
-          "name": "monitor_logs_incident_id_incident_id_fk",
-          "tableFrom": "monitor_logs",
-          "tableTo": "incident",
-          "columnsFrom": [
-            "incident_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1018,17 +724,11 @@
           "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "name": {
           "name": "name",
           "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
@@ -1038,15 +738,21 @@
           "primaryKey": false,
           "notNull": false
         },
-        "logo_url": {
-          "name": "logo_url",
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "favicon_url": {
+          "name": "favicon_url",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "custom_domain": {
           "name": "custom_domain",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -1055,18 +761,25 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": true
-        },
-        "is_password_protected": {
-          "name": "is_password_protected",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
           "default": false
         },
-        "password": {
-          "name": "password",
-          "type": "varchar(255)",
+        "status": {
+          "name": "status",
+          "type": "system_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'operational'"
+        },
+        "status_message": {
+          "name": "status_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_status_change_at": {
+          "name": "last_status_change_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
@@ -1101,41 +814,26 @@
           "method": "btree",
           "with": {}
         },
-        "status_page_slug_idx": {
-          "name": "status_page_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "status_page_custom_domain_idx": {
-          "name": "status_page_custom_domain_idx",
-          "columns": [
-            {
-              "expression": "custom_domain",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "status_page_is_public_idx": {
           "name": "status_page_is_public_idx",
           "columns": [
             {
               "expression": "is_public",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "status_page_status_idx": {
+          "name": "status_page_status_idx",
+          "columns": [
+            {
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1163,146 +861,13 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "status_page_slug_unique": {
-          "name": "status_page_slug_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.status_page_endpoint": {
-      "name": "status_page_endpoint",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "status_page_id": {
-          "name": "status_page_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "endpoint_id": {
-          "name": "endpoint_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "display_order": {
-          "name": "display_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "spe_status_page_id_idx": {
-          "name": "spe_status_page_id_idx",
-          "columns": [
-            {
-              "expression": "status_page_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spe_endpoint_id_idx": {
-          "name": "spe_endpoint_id_idx",
-          "columns": [
-            {
-              "expression": "endpoint_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spe_status_page_order_idx": {
-          "name": "spe_status_page_order_idx",
-          "columns": [
-            {
-              "expression": "status_page_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "display_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "status_page_endpoint_status_page_id_status_page_id_fk": {
-          "name": "status_page_endpoint_status_page_id_status_page_id_fk",
-          "tableFrom": "status_page_endpoint",
-          "tableTo": "status_page",
-          "columnsFrom": [
-            "status_page_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "status_page_endpoint_endpoint_id_endpoint_id_fk": {
-          "name": "status_page_endpoint_endpoint_id_endpoint_id_fk",
-          "tableFrom": "status_page_endpoint",
-          "tableTo": "endpoint",
-          "columnsFrom": [
-            "endpoint_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.status_page_monitor": {
-      "name": "status_page_monitor",
+    "public.status_page_monitors": {
+      "name": "status_page_monitors",
       "schema": "",
       "columns": {
         "id": {
@@ -1324,6 +889,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "display_order": {
           "name": "display_order",
           "type": "integer",
@@ -1331,17 +902,17 @@
           "notNull": true,
           "default": 0
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
+        "is_public": {
+          "name": "is_public",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
+          "default": true
         }
       },
       "indexes": {
-        "spm_status_page_id_idx": {
-          "name": "spm_status_page_id_idx",
+        "status_page_monitors_status_page_id_idx": {
+          "name": "status_page_monitors_status_page_id_idx",
           "columns": [
             {
               "expression": "status_page_id",
@@ -1355,8 +926,8 @@
           "method": "btree",
           "with": {}
         },
-        "spm_monitor_id_idx": {
-          "name": "spm_monitor_id_idx",
+        "status_page_monitors_monitor_id_idx": {
+          "name": "status_page_monitors_monitor_id_idx",
           "columns": [
             {
               "expression": "monitor_id",
@@ -1370,15 +941,9 @@
           "method": "btree",
           "with": {}
         },
-        "spm_status_page_order_idx": {
-          "name": "spm_status_page_order_idx",
+        "status_page_monitors_display_order_idx": {
+          "name": "status_page_monitors_display_order_idx",
           "columns": [
-            {
-              "expression": "status_page_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
             {
               "expression": "display_order",
               "isExpression": false,
@@ -1390,179 +955,12 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        }
-      },
-      "foreignKeys": {
-        "status_page_monitor_status_page_id_status_page_id_fk": {
-          "name": "status_page_monitor_status_page_id_status_page_id_fk",
-          "tableFrom": "status_page_monitor",
-          "tableTo": "status_page",
-          "columnsFrom": [
-            "status_page_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
         },
-        "status_page_monitor_monitor_id_monitor_id_fk": {
-          "name": "status_page_monitor_monitor_id_monitor_id_fk",
-          "tableFrom": "status_page_monitor",
-          "tableTo": "monitor",
-          "columnsFrom": [
-            "monitor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.usage_metrics": {
-      "name": "usage_metrics",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "total_checks": {
-          "name": "total_checks",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "successful_checks": {
-          "name": "successful_checks",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "failed_checks": {
-          "name": "failed_checks",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "avg_response_time_ms": {
-          "name": "avg_response_time_ms",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "max_response_time_ms": {
-          "name": "max_response_time_ms",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "error_rate": {
-          "name": "error_rate",
-          "type": "numeric(5, 2)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "incidents_created": {
-          "name": "incidents_created",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "monitors_active": {
-          "name": "monitors_active",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "downtime_duration_ms": {
-          "name": "downtime_duration_ms",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "retries_triggered": {
-          "name": "retries_triggered",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "cron_jobs_executed": {
-          "name": "cron_jobs_executed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "notifications_sent": {
-          "name": "notifications_sent",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "status_page_views": {
-          "name": "status_page_views",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "date": {
-          "name": "date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "user_date_idx": {
-          "name": "user_date_idx",
+        "status_page_monitors_is_public_idx": {
+          "name": "status_page_monitors_is_public_idx",
           "columns": [
             {
-              "expression": "user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "date",
+              "expression": "is_public",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1575,12 +973,25 @@
         }
       },
       "foreignKeys": {
-        "usage_metrics_user_id_user_id_fk": {
-          "name": "usage_metrics_user_id_user_id_fk",
-          "tableFrom": "usage_metrics",
-          "tableTo": "user",
+        "status_page_monitors_status_page_id_status_page_id_fk": {
+          "name": "status_page_monitors_status_page_id_status_page_id_fk",
+          "tableFrom": "status_page_monitors",
+          "tableTo": "status_page",
           "columnsFrom": [
-            "user_id"
+            "status_page_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "status_page_monitors_monitor_id_monitor_id_fk": {
+          "name": "status_page_monitors_monitor_id_monitor_id_fk",
+          "tableFrom": "status_page_monitors",
+          "tableTo": "monitor",
+          "columnsFrom": [
+            "monitor_id"
           ],
           "columnsTo": [
             "id"
@@ -1657,8 +1068,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "last_login_at": {
-          "name": "last_login_at",
+        "last_signed_in_at": {
+          "name": "last_signed_in_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -1686,7 +1097,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_email_idx": {
+          "name": "user_email_idx",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -1713,8 +1140,27 @@
         "github"
       ]
     },
-    "public.check_status": {
-      "name": "check_status",
+    "public.incident_severity": {
+      "name": "incident_severity",
+      "schema": "public",
+      "values": [
+        "minor",
+        "major",
+        "critical"
+      ]
+    },
+    "public.incident_status": {
+      "name": "incident_status",
+      "schema": "public",
+      "values": [
+        "investigating",
+        "identified",
+        "monitoring",
+        "resolved"
+      ]
+    },
+    "public.monitor_status": {
+      "name": "monitor_status",
       "schema": "public",
       "values": [
         "success",
@@ -1723,44 +1169,15 @@
         "error"
       ]
     },
-    "public.endpoint_method": {
-      "name": "endpoint_method",
+    "public.system_status": {
+      "name": "system_status",
       "schema": "public",
       "values": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE"
-      ]
-    },
-    "public.incident_severity": {
-      "name": "incident_severity",
-      "schema": "public",
-      "values": [
-        "low",
-        "medium",
-        "high",
-        "critical"
-      ]
-    },
-    "public.incident_status": {
-      "name": "incident_status",
-      "schema": "public",
-      "values": [
-        "open",
-        "investigating",
-        "resolved"
-      ]
-    },
-    "public.job_status": {
-      "name": "job_status",
-      "schema": "public",
-      "values": [
-        "pending",
-        "running",
-        "completed",
-        "failed"
+        "operational",
+        "degraded_performance",
+        "partial_outage",
+        "major_outage",
+        "under_maintenance"
       ]
     },
     "public.user_role": {

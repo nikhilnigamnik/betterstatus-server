@@ -4,7 +4,7 @@ export function newFeatureAnnouncementEmail(
   keyBenefits: string[],
   ctaLink: string
 ) {
-  const benefitsList = keyBenefits.map((b) => `<li>${b}</li>`).join("");
+  const benefitsList = keyBenefits.map((b) => `<li>${b}</li>`).join('');
 
   return `
       <html>

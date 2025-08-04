@@ -1,4 +1,4 @@
-import { endpointService } from "@/services/endpoint";
+import { endpointService } from '@/services/endpoint';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -36,9 +36,7 @@ export interface MonitoringResult {
   checked_at: Date;
 }
 
-export type EndpointFromService = Awaited<
-  ReturnType<typeof endpointService.getActiveEndpoints>
->[0];
+export type EndpointFromService = Awaited<ReturnType<typeof endpointService.getActiveEndpoints>>[0];
 
 export const monitoredEndpoints = new Set<string>();
 
