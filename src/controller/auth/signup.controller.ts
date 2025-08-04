@@ -1,9 +1,9 @@
-import { userService } from "@/services/user";
-import { Context } from "hono";
-import { STATUS_CODE } from "@/constants/status-code";
-import { hashPassword } from "@/lib/password";
-import { parseRequest } from "@/lib/request";
-import { signupSchema } from "@/validations/auth.validation";
+import { userService } from '@/services/user';
+import { Context } from 'hono';
+import { STATUS_CODE } from '@/constants/status-code';
+import { hashPassword } from '@/lib/password';
+import { parseRequest } from '@/lib/request';
+import { signupSchema } from '@/validations/auth.validation';
 
 export const signupController = async (c: Context) => {
   try {
@@ -12,7 +12,7 @@ export const signupController = async (c: Context) => {
     if (errors.length > 0) {
       return c.json(
         {
-          message: "Validation failed",
+          message: 'Validation failed',
           errors,
         },
         STATUS_CODE.BAD_REQUEST
@@ -21,13 +21,13 @@ export const signupController = async (c: Context) => {
 
     const { email, password, name, provider } = body;
 
-    const authProvider = provider as "email" | "google" | "github";
+    const authProvider = provider as 'email' | 'google' | 'github';
 
     const existingUser = await userService.getUserByEmail(email);
     if (existingUser) {
       return c.json(
         {
-          message: "User with this email already exists",
+          message: 'User with this email already exists',
         },
         STATUS_CODE.CONFLICT
       );
@@ -35,24 +35,24 @@ export const signupController = async (c: Context) => {
 
     let userData;
 
-    if (authProvider === "email") {
+    if (authProvider === 'email') {
       const hashedPassword = await hashPassword(password);
       userData = {
         email,
         password: hashedPassword,
         name,
         auth_provider: authProvider,
-        role: "user" as const,
+        role: 'user' as const,
         is_active: true,
         email_verified_at: null,
       };
     } else {
       userData = {
         email,
-        password: "",
+        password: '',
         name,
         auth_provider: authProvider,
-        role: "user" as const,
+        role: 'user' as const,
         is_active: true,
         email_verified_at: new Date(),
       };
@@ -63,23 +63,20 @@ export const signupController = async (c: Context) => {
     return c.json(
       {
         message:
-          authProvider === "email"
-            ? "Account created successfully. Please check your email for verification."
-            : "Account created successfully",
+          authProvider === 'email'
+            ? 'Account created successfully. Please check your email for verification.'
+            : 'Account created successfully',
       },
       STATUS_CODE.CREATED
     );
   } catch (error) {
-    console.error("Signup error:", error);
+    console.error('Signup error:', error);
 
     if (error instanceof Error) {
-      if (
-        error.message.includes("duplicate key") ||
-        error.message.includes("unique constraint")
-      ) {
+      if (error.message.includes('duplicate key') || error.message.includes('unique constraint')) {
         return c.json(
           {
-            message: "User with this email already exists",
+            message: 'User with this email already exists',
           },
           STATUS_CODE.CONFLICT
         );
@@ -88,7 +85,7 @@ export const signupController = async (c: Context) => {
 
     return c.json(
       {
-        message: "Internal server error",
+        message: 'Internal server error',
       },
       STATUS_CODE.INTERNAL_SERVER_ERROR
     );

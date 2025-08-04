@@ -1,7 +1,7 @@
-import { serve } from "@hono/node-server";
-import app from "./index";
-import { env } from "./utils/env";
-import logger from "./utils/logger";
+import { serve } from '@hono/node-server';
+import app from './index';
+import { env } from './utils/env';
+import logger from './utils/logger';
 
 function startServer() {
   const port = env.port;

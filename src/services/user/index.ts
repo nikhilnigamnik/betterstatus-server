@@ -1,6 +1,6 @@
-import { db } from "@/utils";
-import { and, eq } from "drizzle-orm";
-import { user } from "@/db";
+import { user } from '@/db';
+import { db } from '@/utils';
+import { and, eq } from 'drizzle-orm';
 
 export const userService = {
   /**
@@ -16,7 +16,7 @@ export const userService = {
         auth_provider: user.auth_provider,
         is_active: user.is_active,
         email_verified_at: user.email_verified_at,
-        last_login_at: user.last_login_at,
+        last_signed_in_at: user.last_signed_in_at,
         role: user.role,
         created_at: user.created_at,
         updated_at: user.updated_at,
@@ -56,10 +56,7 @@ export const userService = {
   /**
    * Update an existing user by ID (only if active)
    */
-  updateUser: async (
-    id: string,
-    userData: Partial<typeof user.$inferInsert>
-  ) => {
+  updateUser: async (id: string, userData: Partial<typeof user.$inferInsert>) => {
     const [updatedUser] = await db
       .update(user)
       .set(userData)

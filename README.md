@@ -232,13 +232,11 @@ CORS_ORIGIN=your-frontend-domain
 ### Common Issues
 
 1. **Database Connection**
-
    - Verify `DATABASE_URL` is correct
    - Check database accessibility
    - Ensure SSL settings if required
 
 2. **Redis Connection**
-
    - Verify `REDIS_URL` is correct
    - Check Redis accessibility
    - Ensure authentication if required

@@ -1,6 +1,6 @@
-import { Context } from "hono";
-import { ApiResponse } from "../types";
-import { isDevelopment } from "@/utils";
+import { Context } from 'hono';
+import { ApiResponse } from '../types';
+import { isDevelopment } from '@/utils';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -10,7 +10,7 @@ export interface AppError extends Error {
 export const errorHandler = (err: Error, c: Context) => {
   const appError = err as AppError;
   const statusCode = appError.statusCode ?? 500;
-  const message = appError.message || "Internal Server Error";
+  const message = appError.message || 'Internal Server Error';
 
   const response: ApiResponse = {
     success: false,

@@ -1,5 +1,5 @@
-import { userService } from "@/services/user";
-import { Context } from "hono";
+import { userService } from '@/services/user';
+import { Context } from 'hono';
 
 export const getUserController = async (c: Context) => {
   const { id } = c.req.param();

@@ -7,13 +7,12 @@
     "build": "tsc && tsc-alias",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "workers": "tsx src/workers.ts",
-    "workers:prod": "node dist/workers.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "format": "prettier --write ."
   },
   "keywords": [
     "typescript",
@@ -24,6 +23,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@cleandns/whois-rdap": "^1.0.48",
     "@hono/node-server": "^1.14.4",
     "@types/bull": "^3.15.9",
     "@types/cors": "^2.8.17",
@@ -35,6 +35,7 @@
     "bullmq": "^5.56.0",
     "cors": "^2.8.5",
     "cron-parser": "^5.3.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.3.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
@@ -47,10 +48,14 @@
     "node-cron": "^4.2.0",
     "node-fetch": "^3.3.2",
     "postgres": "^3.4.7",
+    "tls": "^0.0.1",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.6.0",
     "typescript": "^5.8.3",
     "winston": "^3.17.0",
     "zod": "^3.25.74"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }
