@@ -85,6 +85,9 @@ npm run db:generate
 # Run migrations
 npm run db:migrate
 
+# Seed the database with default data
+npm run db:seed
+
 # Open database studio (optional)
 npm run db:studio
 ```
