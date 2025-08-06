@@ -6,14 +6,13 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "dev": "tsx watch src/server.ts",
-    "dev:local": "dotenv -e .env.local -- tsx watch src/server.ts",
     "start": "node dist/server.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx src/db/seed.ts",
     "format": "prettier --write ."
   },
   "keywords": [

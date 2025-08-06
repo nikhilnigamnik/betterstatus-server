@@ -5,6 +5,7 @@ import { logger } from 'hono/logger';
 import { secureHeaders } from 'hono/secure-headers';
 import { notFound } from './middleware/error-handler';
 import routes from './routes';
+import { planService } from './services/plan';
 
 const app = new Hono();
 
@@ -23,6 +24,11 @@ app.get('/health', (c) => {
     timestamp: new Date().toISOString(),
     message: 'BetterStatus API is running',
   });
+});
+
+app.get('/plan', async (c) => {
+  const freePlanId = await planService.getFreePlanId();
+  return c.json(freePlanId);
 });
 
 app.route('/api', routes);

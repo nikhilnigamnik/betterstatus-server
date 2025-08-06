@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754324495649,
-      "tag": "0000_chunky_johnny_blaze",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754364700363,
-      "tag": "0001_zippy_infant_terrible",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1754367776937,
-      "tag": "0002_tearful_arachne",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1754459299057,
-      "tag": "0003_zippy_sally_floyd",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1754459627552,
-      "tag": "0004_ambiguous_rhodey",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1754474755935,
-      "tag": "0005_lucky_pet_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1754475910708,
-      "tag": "0006_blue_susan_delgado",
+      "when": 1754502098292,
+      "tag": "0000_brave_omega_sentinel",
       "breakpoints": true
     }
   ]
