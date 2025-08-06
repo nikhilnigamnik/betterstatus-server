@@ -1,6 +1,6 @@
 {
-  "id": "0ef52238-67a3-45fb-b28e-f144847a093a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "6f10b7cd-b04e-4b42-84df-80918a1f4486",
+  "prevId": "0ef52238-67a3-45fb-b28e-f144847a093a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -381,10 +381,10 @@
         },
         "check_interval": {
           "name": "check_interval",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true,
-          "default": "'5m'"
+          "default": "'90'"
         },
         "last_check_at": {
           "name": "last_check_at",

@@ -3,7 +3,7 @@ import { Context } from 'hono';
 import { STATUS_CODE } from '@/constants/status-code';
 import { hashPassword } from '@/lib/password';
 import { parseRequest } from '@/lib/request';
-import { signupSchema } from '@/validations/auth.validation';
+import { signupSchema } from '@/validator/auth.validator';
 
 export const signupController = async (c: Context) => {
   try {

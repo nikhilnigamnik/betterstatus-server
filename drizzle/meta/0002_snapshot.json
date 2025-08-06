@@ -1,6 +1,6 @@
 {
-  "id": "0ef52238-67a3-45fb-b28e-f144847a093a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d3883468-295c-48ef-87ba-0744438c8bac",
+  "prevId": "6f10b7cd-b04e-4b42-84df-80918a1f4486",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -365,6 +365,33 @@
           "primaryKey": false,
           "notNull": true
         },
+        "http_method": {
+          "name": "http_method",
+          "type": "monitor_http_method",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'GET'"
+        },
+        "headers": {
+          "name": "headers",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_body": {
+          "name": "request_body",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expected_status_code": {
+          "name": "expected_status_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 200
+        },
         "is_active": {
           "name": "is_active",
           "type": "boolean",
@@ -381,10 +408,10 @@
         },
         "check_interval": {
           "name": "check_interval",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true,
-          "default": "'5m'"
+          "default": "'90'"
         },
         "last_check_at": {
           "name": "last_check_at",
@@ -1111,6 +1138,11 @@
       "name": "incident_status",
       "schema": "public",
       "values": ["investigating", "identified", "monitoring", "resolved"]
+    },
+    "public.monitor_http_method": {
+      "name": "monitor_http_method",
+      "schema": "public",
+      "values": ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]
     },
     "public.monitor_status": {
       "name": "monitor_status",

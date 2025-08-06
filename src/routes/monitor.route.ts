@@ -2,6 +2,7 @@ import {
   createMonitorController,
   deleteMonitorController,
   getMonitorController,
+  getMonitorsController,
   getUserMonitorController,
   updateMonitorController,
 } from '@/controller/monitor';
@@ -10,9 +11,11 @@ import { Hono } from 'hono';
 
 export const monitorRoutes = new Hono();
 
-monitorRoutes.get('/', authenticate(['user', 'admin']), getUserMonitorController);
-monitorRoutes.post('/', authenticate(['user', 'admin']), createMonitorController);
-monitorRoutes.delete('/', authenticate(['user', 'admin']), deleteMonitorController);
+monitorRoutes.use('*', authenticate());
 
-monitorRoutes.get('/:id', authenticate(['user', 'admin']), getMonitorController);
-monitorRoutes.patch('/:id', authenticate(['user', 'admin']), updateMonitorController);
+monitorRoutes.get('/', getUserMonitorController);
+monitorRoutes.get('/all', getMonitorsController);
+monitorRoutes.post('/', createMonitorController);
+monitorRoutes.delete('/', deleteMonitorController);
+monitorRoutes.get('/:id', getMonitorController);
+monitorRoutes.patch('/:id', updateMonitorController);

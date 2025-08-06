@@ -1,6 +1,6 @@
 {
-  "id": "0ef52238-67a3-45fb-b28e-f144847a093a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a2a1d0b8-cfb5-453b-868b-b5c33a0593a8",
+  "prevId": "16dcd0d5-d322-4699-8333-0176ecd836ed",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -74,6 +74,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -151,6 +157,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "incident_deleted_at_idx": {
+          "name": "incident_deleted_at_idx",
+          "columns": [
+            {
+              "expression": "deleted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -158,8 +179,12 @@
           "name": "incident_monitor_id_monitor_id_fk",
           "tableFrom": "incident",
           "tableTo": "monitor",
-          "columnsFrom": ["monitor_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "monitor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -219,6 +244,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -296,6 +327,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "incident_updates_deleted_at_idx": {
+          "name": "incident_updates_deleted_at_idx",
+          "columns": [
+            {
+              "expression": "deleted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -303,8 +349,12 @@
           "name": "incident_updates_incident_id_incident_id_fk",
           "tableFrom": "incident_updates",
           "tableTo": "incident",
-          "columnsFrom": ["incident_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "incident_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -312,8 +362,12 @@
           "name": "incident_updates_user_id_user_id_fk",
           "tableFrom": "incident_updates",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -365,6 +419,33 @@
           "primaryKey": false,
           "notNull": true
         },
+        "http_method": {
+          "name": "http_method",
+          "type": "monitor_http_method",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'GET'"
+        },
+        "headers": {
+          "name": "headers",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_body": {
+          "name": "request_body",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expected_status_code": {
+          "name": "expected_status_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 200
+        },
         "is_active": {
           "name": "is_active",
           "type": "boolean",
@@ -381,10 +462,10 @@
         },
         "check_interval": {
           "name": "check_interval",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true,
-          "default": "'5m'"
+          "default": "'90'"
         },
         "last_check_at": {
           "name": "last_check_at",
@@ -557,8 +638,12 @@
           "name": "monitor_user_id_user_id_fk",
           "tableFrom": "monitor",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -623,6 +708,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -670,6 +761,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "monitor_logs_deleted_at_idx": {
+          "name": "monitor_logs_deleted_at_idx",
+          "columns": [
+            {
+              "expression": "deleted_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -677,8 +783,101 @@
           "name": "monitor_logs_monitor_id_monitor_id_fk",
           "tableFrom": "monitor_logs",
           "tableTo": "monitor",
-          "columnsFrom": ["monitor_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "monitor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.signin_history": {
+      "name": "signin_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "os": {
+          "name": "os",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "browser": {
+          "name": "browser",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device": {
+          "name": "device",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "signin_history_user_id_user_id_fk": {
+          "name": "signin_history_user_id_user_id_fk",
+          "tableFrom": "signin_history",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -830,8 +1029,12 @@
           "name": "status_page_user_id_user_id_fk",
           "tableFrom": "status_page",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -953,8 +1156,12 @@
           "name": "status_page_monitors_status_page_id_status_page_id_fk",
           "tableFrom": "status_page_monitors",
           "tableTo": "status_page",
-          "columnsFrom": ["status_page_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "status_page_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -962,8 +1169,12 @@
           "name": "status_page_monitors_monitor_id_monitor_id_fk",
           "tableFrom": "status_page_monitors",
           "tableTo": "monitor",
-          "columnsFrom": ["monitor_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "monitor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1088,7 +1299,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -1100,22 +1313,53 @@
     "public.auth_provider": {
       "name": "auth_provider",
       "schema": "public",
-      "values": ["email", "google", "github"]
+      "values": [
+        "email",
+        "google",
+        "github"
+      ]
     },
     "public.incident_severity": {
       "name": "incident_severity",
       "schema": "public",
-      "values": ["minor", "major", "critical"]
+      "values": [
+        "minor",
+        "major",
+        "critical"
+      ]
     },
     "public.incident_status": {
       "name": "incident_status",
       "schema": "public",
-      "values": ["investigating", "identified", "monitoring", "resolved"]
+      "values": [
+        "investigating",
+        "identified",
+        "monitoring",
+        "resolved"
+      ]
+    },
+    "public.monitor_http_method": {
+      "name": "monitor_http_method",
+      "schema": "public",
+      "values": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "HEAD",
+        "OPTIONS"
+      ]
     },
     "public.monitor_status": {
       "name": "monitor_status",
       "schema": "public",
-      "values": ["success", "failure", "timeout", "error"]
+      "values": [
+        "success",
+        "failure",
+        "timeout",
+        "error"
+      ]
     },
     "public.system_status": {
       "name": "system_status",
@@ -1131,7 +1375,11 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": ["user", "member", "admin"]
+      "values": [
+        "user",
+        "member",
+        "admin"
+      ]
     }
   },
   "schemas": {},

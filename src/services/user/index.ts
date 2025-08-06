@@ -1,6 +1,7 @@
-import { user } from '@/db';
+import { signin_history, user } from '@/db';
+import { IpInfo } from '@/types';
 import { db } from '@/utils';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 export const userService = {
   /**
@@ -70,5 +71,26 @@ export const userService = {
    */
   deleteUser: async (id: string) => {
     await db.update(user).set({ is_active: false }).where(eq(user.id, id));
+  },
+
+  createSigninHistory: async (userId: string, ipInfo: IpInfo) => {
+    await db.insert(signin_history).values({
+      user_id: userId,
+      ip_address: ipInfo.ip,
+      os: ipInfo.os.name,
+      browser: ipInfo.browser.name,
+      device: ipInfo.device.type,
+      country: ipInfo.country,
+      city: ipInfo.city,
+      region: ipInfo.region,
+    });
+  },
+
+  getSigninHistory: async (userId: string) => {
+    return await db
+      .select()
+      .from(signin_history)
+      .where(eq(signin_history.user_id, userId))
+      .orderBy(desc(signin_history.created_at));
   },
 };

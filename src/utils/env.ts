@@ -10,6 +10,7 @@ export const env: ServerConfig = {
   databaseUrl: process.env.DATABASE_URL ?? '',
   jwtSecret: process.env.JWT_SECRET ?? '',
   encKey: process.env.ENC_KEY ?? '',
+  origin: process.env.ORIGIN ?? '*',
 };
 
 export const isDevelopment = env.environment === 'development';
