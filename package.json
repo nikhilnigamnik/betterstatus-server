@@ -6,11 +6,13 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "dev": "tsx watch src/server.ts",
+    "dev:local": "dotenv -e .env.local -- tsx watch src/server.ts",
     "start": "node dist/server.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "format": "prettier --write ."
   },
@@ -25,6 +27,8 @@
   "dependencies": {
     "@cleandns/whois-rdap": "^1.0.48",
     "@hono/node-server": "^1.14.4",
+    "@react-email/components": "^0.4.0",
+    "@react-email/render": "^1.1.4",
     "@types/bull": "^3.15.9",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -48,6 +52,9 @@
     "node-cron": "^4.2.0",
     "node-fetch": "^3.3.2",
     "postgres": "^3.4.7",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "resend": "^4.8.0",
     "tls": "^0.0.1",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.6.0",
@@ -56,6 +63,7 @@
     "zod": "^3.25.74"
   },
   "devDependencies": {
+    "dotenv-cli": "^10.0.0",
     "prettier": "^3.6.2"
   }
 }

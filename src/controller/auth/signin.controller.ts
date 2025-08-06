@@ -3,6 +3,7 @@ import { setAuthCookie } from '@/lib/cookie';
 import { comparePassword } from '@/lib/password';
 import { userService } from '@/services/user';
 import { Context } from 'hono';
+import { getIpInfo } from '@/lib/ipinfo';
 
 export const signinController = async (c: Context) => {
   const { email, password, provider, name, avatarUrl } = await c.req.json();

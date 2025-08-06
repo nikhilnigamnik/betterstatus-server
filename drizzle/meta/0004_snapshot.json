@@ -1,6 +1,6 @@
 {
-  "id": "0ef52238-67a3-45fb-b28e-f144847a093a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "16dcd0d5-d322-4699-8333-0176ecd836ed",
+  "prevId": "60059538-2ee4-4d2c-a3df-19b12caa61f5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -365,6 +365,33 @@
           "primaryKey": false,
           "notNull": true
         },
+        "http_method": {
+          "name": "http_method",
+          "type": "monitor_http_method",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'GET'"
+        },
+        "headers": {
+          "name": "headers",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_body": {
+          "name": "request_body",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expected_status_code": {
+          "name": "expected_status_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 200
+        },
         "is_active": {
           "name": "is_active",
           "type": "boolean",
@@ -381,10 +408,10 @@
         },
         "check_interval": {
           "name": "check_interval",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true,
-          "default": "'5m'"
+          "default": "'90'"
         },
         "last_check_at": {
           "name": "last_check_at",
@@ -678,6 +705,91 @@
           "tableFrom": "monitor_logs",
           "tableTo": "monitor",
           "columnsFrom": ["monitor_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.signin_history": {
+      "name": "signin_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "os": {
+          "name": "os",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "browser": {
+          "name": "browser",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device": {
+          "name": "device",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "signin_history_user_id_user_id_fk": {
+          "name": "signin_history_user_id_user_id_fk",
+          "tableFrom": "signin_history",
+          "tableTo": "user",
+          "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -1111,6 +1223,11 @@
       "name": "incident_status",
       "schema": "public",
       "values": ["investigating", "identified", "monitoring", "resolved"]
+    },
+    "public.monitor_http_method": {
+      "name": "monitor_http_method",
+      "schema": "public",
+      "values": ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]
     },
     "public.monitor_status": {
       "name": "monitor_status",
