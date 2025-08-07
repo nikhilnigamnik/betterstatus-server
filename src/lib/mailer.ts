@@ -5,9 +5,9 @@ const resend = new Resend('re_RbNcwkNX_3vgtf4mSD2981VUoRK6jgBEe');
 
 export const sendEmail = async () => {
   return await resend.emails.send({
-    from: `Resend <onboarding@resend.dev>`,
+    from: `Nikhil from BetterStatus <onboarding@resend.dev>`,
     to: 'nikhilnigamnik@gmail.com',
-    subject: 'Onboarding Email Verification',
+    subject: 'Welcome to BetterStatus!',
     react: WelcomeEmail({ name: 'Nikks' }),
   });
 };
