@@ -6,6 +6,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { notFound } from './middleware/error-handler';
 import routes from './routes';
 import { planService } from './services/plan';
+import { sendEmail } from './lib/mailer';
 
 const app = new Hono();
 
@@ -29,6 +30,11 @@ app.get('/health', (c) => {
 app.get('/plan', async (c) => {
   const freePlanId = await planService.getFreePlanId();
   return c.json(freePlanId);
+});
+
+app.get('/email', async (c) => {
+  const email = await sendEmail();
+  return c.json(email);
 });
 
 app.route('/api', routes);

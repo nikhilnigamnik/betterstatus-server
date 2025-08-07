@@ -13,6 +13,4 @@ function startServer() {
   logger.info(`🔗 API: http://localhost:${port}/api`);
 }
 
-if (require.main === module) {
-  startServer();
-}
+startServer();
