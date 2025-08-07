@@ -20,6 +20,8 @@ export interface ServerConfig {
   jwtSecret: string;
   encKey: string;
   origin: string;
+  emailUser: string;
+  emailPass: string;
 }
 
 export interface JobData {

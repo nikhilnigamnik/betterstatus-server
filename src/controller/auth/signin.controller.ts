@@ -14,7 +14,7 @@ export const signinController = async (c: Context) => {
     const foundUser = await userService.getUserByEmail(email);
 
     if (!foundUser) {
-      return c.json({ message: 'User not found' }, STATUS_CODE.NOT_FOUND);
+      return c.json({ message: 'Account not found' }, STATUS_CODE.NOT_FOUND);
     }
 
     if (!foundUser.password) {

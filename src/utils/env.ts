@@ -11,6 +11,8 @@ export const env: ServerConfig = {
   jwtSecret: process.env.JWT_SECRET ?? '',
   encKey: process.env.ENC_KEY ?? '',
   origin: process.env.ORIGIN ?? '*',
+  emailUser: process.env.EMAIL_USER ?? '',
+  emailPass: process.env.EMAIL_PASS ?? '',
 };
 
 export const isDevelopment = env.environment === 'development';

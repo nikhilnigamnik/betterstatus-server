@@ -22,7 +22,7 @@ export function WelcomeEmail({ name }) {
       <Preview>Welcome to BetterStatus</Preview>
       <Tailwind>
         <Body className="mx-auto my-auto bg-white font-sans">
-          <Container className="mx-auto my-10 max-w-[600px] rounded border border-solid border-neutral-200 px-10 py-5">
+          <Container className="mx-auto max-w-[600px] rounded border border-solid border-neutral-200 px-10 py-5">
             <Section className="mt-8">
               <Img src={'https://assets.betterstatus.co/icon.png'} height="32" alt="BetterStatus" />
             </Section>
