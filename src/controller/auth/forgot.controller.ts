@@ -9,6 +9,6 @@ export const forgotPasswordController = async (c: Context) => {
   const user = await userService.getUserByEmail(body.email);
 
   if (!user) {
-    return c.json({ message: 'User not found' }, STATUS_CODE.BAD_REQUEST);
+    return c.json({ message: 'Account not found' }, STATUS_CODE.BAD_REQUEST);
   }
 };
