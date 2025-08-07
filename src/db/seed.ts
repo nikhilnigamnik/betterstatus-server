@@ -10,7 +10,7 @@ async function seedPlans() {
     const plans = [
       {
         name: 'free' as const,
-        price: 0,
+        price: '0',
         billing_cycle: 'monthly' as const,
         max_monitors: 2,
         max_status_pages: 1,
@@ -18,7 +18,7 @@ async function seedPlans() {
       },
       {
         name: 'pro' as const,
-        price: 1200,
+        price: '1200',
         billing_cycle: 'monthly' as const,
         max_monitors: 10,
         max_status_pages: 5,

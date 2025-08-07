@@ -1,4 +1,4 @@
-import { signin_history, user } from '@/db';
+import { plan, signin_history, user, user_plan } from '@/db';
 import { IpInfo } from '@/types';
 import { db } from '@/utils';
 import { and, desc, eq } from 'drizzle-orm';
@@ -50,8 +50,19 @@ export const userService = {
    * Create a new user
    */
   createUser: async (userData: typeof user.$inferInsert) => {
-    const [newUser] = await db.insert(user).values(userData).returning();
-    return newUser;
+    return await db.transaction(async (tx) => {
+      const [newUser] = await tx.insert(user).values(userData).returning();
+      const [freePlan] = await tx.select().from(plan).where(eq(plan.name, 'free'));
+
+      await tx.insert(user_plan).values({
+        user_id: newUser.id,
+        plan_id: freePlan.id,
+        status: 'active',
+        started_at: new Date(),
+      });
+
+      return newUser;
+    });
   },
 
   /**

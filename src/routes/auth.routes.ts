@@ -3,6 +3,7 @@ import {
   signoutController,
   signupController,
   profileController,
+  getSigninHistoryController,
 } from '@/controller/auth';
 import { verifyEmailController } from '@/controller/auth/verify.controller';
 import { authenticate } from '@/middleware/auth';
@@ -15,3 +16,4 @@ authRoutes.post('/signup', signupController);
 authRoutes.get('/verify', verifyEmailController);
 authRoutes.get('/signout', authenticate(['user']), signoutController);
 authRoutes.get('/me', authenticate(['user']), profileController);
+authRoutes.get('/signin-history', authenticate(), getSigninHistoryController);

@@ -8,6 +8,8 @@ import { getIpInfo } from '@/lib/ipinfo';
 export const signinController = async (c: Context) => {
   const { email, password, provider, name, avatarUrl } = await c.req.json();
 
+  const ipInfo = await getIpInfo();
+
   if (provider === 'email') {
     const foundUser = await userService.getUserByEmail(email);
 
@@ -30,6 +32,8 @@ export const signinController = async (c: Context) => {
       role: foundUser.role,
       email: foundUser.email,
     });
+
+    await userService.createSigninHistory(foundUser.id, ipInfo);
 
     return c.json({ message: 'Login successful' }, STATUS_CODE.SUCCESS);
   }
@@ -57,6 +61,8 @@ export const signinController = async (c: Context) => {
       email: existingUser.email,
     });
 
+    await userService.createSigninHistory(existingUser.id, ipInfo);
+
     return c.json({ message: 'Login successful' }, STATUS_CODE.SUCCESS);
   }
 
@@ -81,6 +87,8 @@ export const signinController = async (c: Context) => {
       role: existingUser.role,
       email: existingUser.email,
     });
+
+    await userService.createSigninHistory(existingUser.id, ipInfo);
 
     return c.json({ message: 'Login successful' }, STATUS_CODE.SUCCESS);
   }
