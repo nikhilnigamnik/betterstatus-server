@@ -1,12 +1,12 @@
 import { STATUS_CODE } from '@/constants/status-code';
 import { setAuthCookie } from '@/lib/cookie';
-import { comparePassword } from '@/lib/password';
 import { userService } from '@/services/user';
 import { Context } from 'hono';
 import { getIpInfo } from '@/lib/ipinfo';
+import { sendWelcomeEmail } from '@/email/transporter';
 
 export const signinController = async (c: Context) => {
-  const { email, password, provider, name, avatarUrl } = await c.req.json();
+  const { email, provider, name, avatarUrl } = await c.req.json();
 
   const ipInfo = await getIpInfo();
 
@@ -15,16 +15,6 @@ export const signinController = async (c: Context) => {
 
     if (!foundUser) {
       return c.json({ message: 'Account not found' }, STATUS_CODE.NOT_FOUND);
-    }
-
-    if (!foundUser.password) {
-      return c.json({ message: 'Invalid email or password' }, STATUS_CODE.UNAUTHORIZED);
-    }
-
-    const isPasswordValid = await comparePassword(password, foundUser.password);
-
-    if (!isPasswordValid) {
-      return c.json({ message: 'Invalid email or password' }, STATUS_CODE.UNAUTHORIZED);
     }
 
     await setAuthCookie(c, {
@@ -53,6 +43,8 @@ export const signinController = async (c: Context) => {
         is_active: true,
         email_verified_at: new Date(),
       });
+
+      await sendWelcomeEmail(email, name);
     }
 
     await setAuthCookie(c, {
@@ -80,6 +72,8 @@ export const signinController = async (c: Context) => {
         is_active: true,
         email_verified_at: new Date(),
       });
+
+      await sendWelcomeEmail(email, name);
     }
 
     await setAuthCookie(c, {

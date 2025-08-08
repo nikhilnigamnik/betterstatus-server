@@ -4,6 +4,14 @@ import { db } from '@/utils';
 import { and, desc, eq } from 'drizzle-orm';
 
 export const userService = {
+  getInactiveUserById: async (id: string) => {
+    const [foundUser] = await db
+      .select()
+      .from(user)
+      .where(and(eq(user.id, id), eq(user.is_active, false)));
+    return foundUser;
+  },
+
   /**
    * Get a user by ID (only if active)
    */
@@ -74,6 +82,14 @@ export const userService = {
       .set(userData)
       .where(and(eq(user.id, id), eq(user.is_active, true)))
       .returning();
+    return updatedUser;
+  },
+
+  /**
+   * Update any user by ID (active or inactive)
+   */
+  updateUserById: async (id: string, userData: Partial<typeof user.$inferInsert>) => {
+    const [updatedUser] = await db.update(user).set(userData).where(eq(user.id, id)).returning();
     return updatedUser;
   },
 

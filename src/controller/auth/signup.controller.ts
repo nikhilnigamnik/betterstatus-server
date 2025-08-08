@@ -1,71 +1,103 @@
+import { STATUS_CODE } from '@/constants/status-code';
+import { setAuthCookie } from '@/lib/cookie';
 import { userService } from '@/services/user';
 import { Context } from 'hono';
-import { STATUS_CODE } from '@/constants/status-code';
-import { hashPassword } from '@/lib/password';
-import { parseRequest } from '@/lib/request';
-import { signupSchema } from '@/validator/auth.validator';
 import { getIpInfo } from '@/lib/ipinfo';
-import { sendWelcomeEmail } from '@/email/transporter';
+import { sendVerifyEmail, sendWelcomeEmail } from '@/email/transporter';
+import { generateToken } from '@/lib/jwt';
 
 export const signupController = async (c: Context) => {
-  const { body } = await parseRequest(c, signupSchema);
+  const { email, provider, name, avatarUrl } = await c.req.json();
+
   const ipInfo = await getIpInfo();
 
-  const { email, password, name, provider, avatarUrl } = body;
+  if (provider === 'email') {
+    const existingUser = await userService.getUserByEmail(email);
 
-  const authProvider = provider as 'email' | 'google' | 'github';
+    if (existingUser) {
+      return c.json({ message: 'Account already exists' }, STATUS_CODE.CONFLICT);
+    }
 
-  const existingUser = await userService.getUserByEmail(email);
+    const newUser = await userService.createUser({
+      name,
+      email,
+      password: null,
+      auth_provider: 'email',
+      provider_id: null,
+      avatar_url: null,
+      role: 'user',
+      is_active: false,
+      email_verified_at: null,
+    });
 
-  if (existingUser) {
+    const token = await generateToken({ id: newUser.id });
+
+    await sendVerifyEmail(email, token);
+
     return c.json(
-      {
-        message: 'Account already exists with this email',
-      },
-      STATUS_CODE.CONFLICT
+      { message: 'Account created successfully. Please verify your email.' },
+      STATUS_CODE.CREATED
     );
   }
 
-  await sendWelcomeEmail(email, name);
+  if (provider === 'google') {
+    let existingUser = await userService.getUserByEmail(email);
 
-  let userData;
+    if (!existingUser) {
+      existingUser = await userService.createUser({
+        name,
+        email,
+        password: null,
+        auth_provider: 'google',
+        provider_id: null,
+        avatar_url: avatarUrl,
+        role: 'user',
+        is_active: true,
+        email_verified_at: new Date(),
+      });
 
-  if (authProvider === 'email') {
-    const hashedPassword = await hashPassword(password);
-    userData = {
-      email,
-      password: hashedPassword,
-      name,
-      auth_provider: authProvider,
-      role: 'user' as const,
-      is_active: false,
-      email_verified_at: null,
-      avatar_url: avatarUrl,
-    };
-  } else {
-    userData = {
-      email,
-      password: '',
-      name,
-      auth_provider: authProvider,
-      role: 'user' as const,
-      is_active: true,
-      email_verified_at: new Date(),
-      avatar_url: avatarUrl,
-    };
+      await sendWelcomeEmail(email, name);
+    }
+
+    await setAuthCookie(c, {
+      id: existingUser.id,
+      role: existingUser.role,
+      email: existingUser.email,
+    });
+
+    await userService.createSigninHistory(existingUser.id, ipInfo);
+
+    return c.json({ message: 'Login successful' }, STATUS_CODE.SUCCESS);
   }
 
-  const user = await userService.createUser(userData);
+  if (provider === 'github') {
+    let existingUser = await userService.getUserByEmail(email);
 
-  await userService.createSigninHistory(user.id, ipInfo);
+    if (!existingUser) {
+      existingUser = await userService.createUser({
+        name,
+        email,
+        password: null,
+        auth_provider: 'github',
+        provider_id: null,
+        role: 'user',
+        is_active: true,
+        email_verified_at: new Date(),
+      });
 
-  return c.json(
-    {
-      message:
-        authProvider === 'email'
-          ? 'Account created successfully. Please check your email for verification.'
-          : 'Account created successfully',
-    },
-    STATUS_CODE.CREATED
-  );
+      await sendWelcomeEmail(email, name);
+    }
+
+    await setAuthCookie(c, {
+      id: existingUser.id,
+      role: existingUser.role,
+      email: existingUser.email,
+    });
+
+    await userService.createSigninHistory(existingUser.id, ipInfo);
+
+    return c.json({ message: 'Login successful' }, STATUS_CODE.SUCCESS);
+  }
+
+  return c.json({ message: 'Invalid provider' }, STATUS_CODE.BAD_REQUEST);
 };

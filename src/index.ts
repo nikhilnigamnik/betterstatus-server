@@ -6,6 +6,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { notFound } from './middleware/error-handler';
 import routes from './routes';
 import { planService } from './services/plan';
+import { rateLimiterMiddleware } from './lib/rate-limiter';
 
 const app = new Hono();
 
@@ -18,7 +19,7 @@ app.use(
   })
 );
 
-app.get('/health', (c) => {
+app.get('/health', rateLimiterMiddleware({ limit: 10 }), (c) => {
   return c.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
