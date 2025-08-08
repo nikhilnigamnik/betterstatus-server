@@ -41,7 +41,6 @@
     "dotenv": "^16.3.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
-    "express-rate-limit": "^7.5.1",
     "helmet": "^7.1.0",
     "hono": "^4.8.3",
     "hono-rate-limiter": "^0.4.2",
